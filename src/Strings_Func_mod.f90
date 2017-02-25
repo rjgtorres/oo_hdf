@@ -32,7 +32,7 @@ module Strings_Func_mod
         case("A":"Z")
             To_lower(i:i) = achar(iachar(str(i:i))+32)
         end select
-      end do  
+      end do
     end function To_lower
 !##################################################################################################################################!
 !------------------------------------------------------------------------
@@ -72,14 +72,14 @@ module Strings_Func_mod
       integer(kind=I16)              :: name_len, name_spaces
       integer(kind=I16)              :: i
       !-----------------------------------------------------------------------------------------------
-      
+
       name_spaces=size(field_names)
       allocate(position_under(name_spaces))
       reset=scan(trim(filenamein), '/',back=.true.)      !To find the last slash
       name_len=len(trim(filenamein))
 
       position_under(1) = scan(trim(filenamein(reset+1:name_len)), '_')
-      position_under(1) = reset + position_under(1) 
+      position_under(1) = reset + position_under(1)
       if( name_spaces > 2 ) then
           do i=2,name_spaces-1
               position_under(i) = scan(trim(filenamein(sum(position_under(1:i-1))+1:name_len)), '_')
@@ -96,7 +96,7 @@ module Strings_Func_mod
               field_names(i)=filenamein(sum(position_under(1:i-1))+1:sum(position_under(1:i))-1)
           end do
       end if
-      
+
       deallocate(position_under)
     end subroutine Decomp_Names
 !##################################################################################################################################!
