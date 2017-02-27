@@ -525,72 +525,314 @@ module H5_Func_mod
     end function Create_Empty_Dataset
 
 !##################################################################################################################################!
-    function Read_Int_Slab(file_id,dset_name,rank,offset,dshape,out_array) result(ierr)
+    function Read_Int_1dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
-        integer, intent(in) :: file_id
+        integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer, intent(in) :: rank
-        integer(kind=I64), intent(in) :: offset(rank), dshape(rank)
-        integer(kind=I64) :: offset_out(rank), dims(rank)
+        integer(kind=I32), parameter :: RANK=1
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        integer(kind=I32), allocatable :: out_array(:,:)
+        integer(kind=I32), intent(out) :: out_array(:)
 
-        offset_out = [0,0]
-        dims=dshape
+        offset_out = [0]
 
-        call H5dopen_f(file_id, dset_name, dset_id, ierr)
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(rank, dims, memspace, ierr)
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        if (.not. allocated(out_array)) allocate(out_array(dims(1),dims(2)))
-
-        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dims, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
         call H5dclose_f(dset_id, ierr)
-    end function Read_Int_Slab
+    end function Read_Int_1dSlab
 
 !##################################################################################################################################!
-    function Read_Real_Slab(file_id,dset_name,rank,offset,dshape,out_array) result(ierr)
+    function Read_Real_1dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
-        integer, intent(in) :: file_id
+        integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer, intent(in) :: rank
-        integer(kind=I64), intent(in) :: offset(rank), dshape(rank)
-        integer(kind=I64) :: offset_out(rank), dims(rank)
+        integer, parameter :: RANK=1
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        real(kind=SP), allocatable :: out_array(:,:)
+        real(kind=SP), intent(out) :: out_array(:)
 
-        offset_out = [0,0]
-        dims=dshape
+        offset_out = [0]
 
-        call H5dopen_f(file_id, dset_name, dset_id, ierr)
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(rank, dims, memspace, ierr)
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        if (.not. allocated(out_array)) allocate(out_array(dims(1),dims(2)))
-
-        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dims, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
         call H5dclose_f(dset_id, ierr)
-    end function Read_Real_Slab
+    end function Read_Real_1dSlab
+
+!##################################################################################################################################!
+    function Read_Int_2dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer(kind=I32), parameter :: RANK=2
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        integer(kind=I32), intent(out) :: out_array(:,:)
+
+        offset_out = [0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Int_2dSlab
+
+!##################################################################################################################################!
+    function Read_Real_2dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer, parameter :: RANK=2
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        real(kind=SP), intent(out) :: out_array(:,:)
+
+        offset_out = [0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Real_2dSlab
+
+!##################################################################################################################################!
+    function Read_Int_3dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer(kind=I32), parameter :: RANK=3
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        integer(kind=I32), intent(out) :: out_array(:,:,:)
+
+        offset_out = [0,0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Int_3dSlab
+
+!##################################################################################################################################!
+    function Read_Real_3dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer, parameter :: RANK=3
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        real(kind=SP), intent(out) :: out_array(:,:,:)
+
+        offset_out = [0,0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Real_3dSlab
+
+!##################################################################################################################################!
+    function Read_Int_4dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer(kind=I32), parameter :: RANK=4
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        integer(kind=I32), intent(out) :: out_array(:,:,:,:)
+
+        offset_out = [0,0,0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Int_4dSlab
+
+!##################################################################################################################################!
+    function Read_Real_4dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer, parameter :: RANK=4
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        real(kind=SP), intent(out) :: out_array(:,:,:,:)
+
+        offset_out = [0,0,0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Real_4dSlab
+
+!##################################################################################################################################!
+    function Read_Int_5dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer(kind=I32), parameter :: RANK=5
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        integer(kind=I32), intent(out) :: out_array(:,:,:,:,:)
+
+        offset_out = [0,0,0,0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Int_5dSlab
+
+!##################################################################################################################################!
+    function Read_Real_5dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+        ! Reads a section of a HDF5 dataset
+        !
+        implicit none
+        integer, intent(in) :: obj_id
+        character(len=255), intent(in) :: dset_name
+        integer, parameter :: RANK=5
+        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
+        integer(kind=I64) :: offset_out(RANK)
+        integer :: ierr
+        integer :: dset_id, dataspace, memspace
+        real(kind=SP), intent(out) :: out_array(:,:,:,:,:)
+
+        offset_out = [0,0,0,0,0]
+
+        call H5dopen_f(obj_id, dset_name, dset_id, ierr)
+        call H5dget_space_f(dset_id, dataspace, ierr)
+        call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
+
+        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+
+        call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
+
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+
+        call H5sclose_f(dataspace, ierr)
+        call H5sclose_f(memspace, ierr)
+        call H5dclose_f(dset_id, ierr)
+    end function Read_Real_5dSlab
 
 !##################################################################################################################################!
     function Read_Char_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
@@ -692,7 +934,7 @@ module H5_Func_mod
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
         call h5tget_size_f(type_id, hdfsize, hdferr)
-        
+
         adims = shape(val, kind=HID_T)
         call h5aread_f(attr_id, type_id, val, adims, hdferr)
         call H5aclose_f(attr_id,hdferr)
@@ -727,7 +969,7 @@ module H5_Func_mod
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
         call h5tget_size_f(type_id, hdfsize, hdferr)
-        
+
         adims = [0]
         call h5aread_f(attr_id, type_id, val, adims, hdferr)
         call H5aclose_f(attr_id,hdferr)
@@ -762,7 +1004,7 @@ module H5_Func_mod
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
         call h5tget_size_f(type_id, hdfsize, hdferr)
-        
+
         adims = shape(val, kind=HID_T)
         call h5aread_f(attr_id, type_id, val, adims, hdferr)
         call H5aclose_f(attr_id,hdferr)
@@ -797,7 +1039,7 @@ module H5_Func_mod
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
         call h5tget_size_f(type_id, hdfsize, hdferr)
-        
+
         adims = [0]
         call h5aread_f(attr_id, type_id, val, adims, hdferr)
         call H5aclose_f(attr_id,hdferr)
@@ -833,7 +1075,7 @@ module H5_Func_mod
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
         call h5tget_size_f(type_id, hdfsize, hdferr)
-        
+
         adims = shape(val, kind=HID_T)
         call h5aread_f(attr_id, type_id, val, adims, hdferr)
         call H5aclose_f(attr_id,hdferr)
@@ -868,7 +1110,7 @@ module H5_Func_mod
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
         call h5tget_size_f(type_id, hdfsize, hdferr)
-        
+
         adims = [0]
         call h5aread_f(attr_id, type_id, val, adims, hdferr)
         call H5aclose_f(attr_id,hdferr)
