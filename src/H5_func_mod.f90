@@ -29,6 +29,23 @@ module H5_Func_mod
     module procedure Create_Char_Attr1
   end interface Create_Attr
 
+  interface Read_Dset
+     module procedure hdf_read_dataset_integer_0
+     module procedure hdf_read_dataset_integer_1
+     module procedure hdf_read_dataset_integer_2
+     module procedure hdf_read_dataset_integer_3
+     module procedure hdf_read_dataset_integer_4
+     module procedure hdf_read_dataset_integer_5
+     module procedure hdf_read_dataset_integer_6
+     module procedure hdf_read_dataset_double_0
+     module procedure hdf_read_dataset_double_1
+     module procedure hdf_read_dataset_double_2
+     module procedure hdf_read_dataset_double_3
+     module procedure hdf_read_dataset_double_4
+     module procedure hdf_read_dataset_double_5
+     module procedure hdf_read_dataset_double_6
+  end interface Read_Dset
+
   contains
 !##################################################################################################################################!
   function hdf_open_file(filename, state, mode) result(file_id)
@@ -1116,4 +1133,267 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Int_Attr0
 
+!##################################################################################################################################!
+    function hdf_read_dataset_integer_0(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      integer, intent(out) :: data                ! data to be written
+
+      integer(SIZE_T) :: dims(1)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = (/ 0 /)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_integer_0
+
+!##################################################################################################################################!
+    function hdf_read_dataset_integer_1(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      integer, intent(out) :: data(:)             ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(1)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 1
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_integer_1
+
+!##################################################################################################################################!
+    function hdf_read_dataset_integer_2(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      integer, intent(out) :: data(:,:)           ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(2)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 2
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_integer_2
+
+!##################################################################################################################################!
+    function hdf_read_dataset_integer_3(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      integer, intent(out) :: data(:,:,:)         ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(3)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 3
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_integer_3
+
+!##################################################################################################################################!
+    function hdf_read_dataset_integer_4(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      integer, intent(out) :: data(:,:,:,:)       ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(4)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 4
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_integer_4
+
+!##################################################################################################################################!
+    function hdf_read_dataset_integer_5(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      integer, intent(out) :: data(:,:,:,:,:)     ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(5)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 5
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_integer_5
+
+!##################################################################################################################################!
+    function hdf_read_dataset_integer_6(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      integer, intent(out) :: data(:,:,:,:,:,:)   ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(6)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 6
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_integer_6
+    
+!##################################################################################################################################!
+    function hdf_read_dataset_double_0(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(dp), intent(out) :: data               ! data to be written
+
+      integer(SIZE_T) :: dims(1)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = (/ 0 /)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_double_0
+
+!##################################################################################################################################!
+    function hdf_read_dataset_double_1(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(dp), intent(out) :: data(:)            ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(1)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 1
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_double_1
+
+!##################################################################################################################################!
+    function hdf_read_dataset_double_2(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(dp), intent(out) :: data(:,:)          ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(2)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 2
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_double_2
+
+!##################################################################################################################################!
+    function hdf_read_dataset_double_3(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(dp), intent(out) :: data(:,:,:)        ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(3)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 3
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_double_3
+
+!##################################################################################################################################!
+    function hdf_read_dataset_double_4(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(dp), intent(out) :: data(:,:,:,:)      ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(4)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 4
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_double_4
+
+!##################################################################################################################################!
+    function hdf_read_dataset_double_5(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(dp), intent(out) :: data(:,:,:,:,:)    ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(5)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 5
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_double_5
+
+!##################################################################################################################################!
+    function hdf_read_dataset_double_6(loc_id, dset_name, data) result(ierr)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(dp), intent(out) :: data(:,:,:,:,:,:)  ! data to be written
+
+      integer :: rank
+      integer(SIZE_T) :: dims(6)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      rank = 6
+      dims = shape(data, KIND=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function hdf_read_dataset_double_6
+
+!##################################################################################################################################!
 end module H5_Func_mod
