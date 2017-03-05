@@ -46,6 +46,39 @@ module H5_Func_mod
      module procedure hdf_read_dataset_double_6
   end interface Read_Dset
 
+  interface Create_Dset
+    module procedure Create_Int8_1d_Dataset
+    module procedure Create_Int16_1d_Dataset
+    module procedure Create_Int32_1d_Dataset
+    module procedure Create_Real32_1d_Dataset
+    module procedure Create_Real64_1d_Dataset
+    module procedure Create_Int8_2d_Dataset
+    module procedure Create_Int16_2d_Dataset
+    module procedure Create_Int32_2d_Dataset
+    module procedure Create_Real32_2d_Dataset
+    module procedure Create_Real64_2d_Dataset
+    module procedure Create_Int8_3d_Dataset
+    module procedure Create_Int16_3d_Dataset
+    module procedure Create_Int32_3d_Dataset
+    module procedure Create_Real32_3d_Dataset
+    module procedure Create_Real64_3d_Dataset
+    module procedure Create_Int8_4d_Dataset
+    module procedure Create_Int16_4d_Dataset
+    module procedure Create_Int32_4d_Dataset
+    module procedure Create_Real32_4d_Dataset
+    module procedure Create_Real64_4d_Dataset
+    module procedure Create_Int8_5d_Dataset
+    module procedure Create_Int16_5d_Dataset
+    module procedure Create_Int32_5d_Dataset
+    module procedure Create_Real32_5d_Dataset
+    module procedure Create_Real64_5d_Dataset
+    module procedure Create_Int8_6d_Dataset
+    module procedure Create_Int16_6d_Dataset
+    module procedure Create_Int32_6d_Dataset
+    module procedure Create_Real32_6d_Dataset
+    module procedure Create_Real64_6d_Dataset
+  end interface Create_Dset
+
   contains
 !##################################################################################################################################!
   function hdf_open_file(filename, state, mode) result(file_id)
@@ -127,16 +160,16 @@ module H5_Func_mod
   end function hdf_close_group
 
 !##################################################################################################################################!
-  function hdf_get_rank(loc_id, dset_name, rank) result(hdferror)
+  function hdf_get_rank(loc_id, dset_name, D_RANK) result(hdferror)
     integer(I32), intent(in) :: loc_id        !< location id
     character(len=*), intent(in) :: dset_name   !< dataset name
-    integer, intent(out) :: rank                !< rank of the dataset
+    integer, intent(out) :: D_RANK                !< rank of the dataset
     integer(I32) :: dset_id, dspace_id
     integer :: hdferror
 
     call h5dopen_f(loc_id, dset_name, dset_id, hdferror)
     call h5dget_space_f(dset_id, dspace_id, hdferror)
-    call h5sget_simple_extent_ndims_f(dspace_id, rank, hdferror)
+    call h5sget_simple_extent_ndims_f(dspace_id, D_RANK, hdferror)
 
     call h5sclose_f(dspace_id, hdferror)
     call h5dclose_f(dset_id, hdferror)
@@ -148,15 +181,15 @@ module H5_Func_mod
     character(len=*), intent(in) :: dset_name   !< name of dataset
     integer, intent(out) :: dims(:)             !< dimensions of the dataset
     integer(I32) :: dset_id, dspace_id
-    integer :: rank
+    integer :: D_RANK
     integer(HSIZE_T) :: dset_dims(6), max_dims(6)
     integer :: hdferror
 
     call h5dopen_f(loc_id, dset_name, dset_id, hdferror)
     call h5dget_space_f(dset_id, dspace_id, hdferror)
-    call h5sget_simple_extent_ndims_f(dspace_id, rank, hdferror)
-    call h5sget_simple_extent_dims_f(dspace_id, dset_dims(1:rank), max_dims(1:rank), hdferror)
-    dims(1:rank) = int(dset_dims(1:rank))
+    call h5sget_simple_extent_ndims_f(dspace_id, D_RANK, hdferror)
+    call h5sget_simple_extent_dims_f(dspace_id, dset_dims(1:D_RANK), max_dims(1:D_RANK), hdferror)
+    dims(1:D_RANK) = int(dset_dims(1:D_RANK))
 
     call h5sclose_f(dspace_id, hdferror)
     call h5dclose_f(dset_id, hdferror)
@@ -242,7 +275,7 @@ module H5_Func_mod
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 2 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
-        integer(kind=I32), parameter :: RANK1=1
+        integer(kind=I32), parameter :: A_RANK=rank(val)
 
         obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
@@ -250,7 +283,7 @@ module H5_Func_mod
         if( adims(1)==1 ) then
           call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         else
-          call H5screate_simple_f(RANK1, adims, space_id, hdferr)
+          call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
         call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
@@ -299,7 +332,7 @@ module H5_Func_mod
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
-        integer(kind=I32), parameter :: RANK1=1
+        integer(kind=I32), parameter :: A_RANK=rank(val)
 
         obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
@@ -307,7 +340,7 @@ module H5_Func_mod
         if( adims(1)==1 ) then
           call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         else
-          call H5screate_simple_f(RANK1, adims, space_id, hdferr)
+          call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
         call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
@@ -357,7 +390,7 @@ module H5_Func_mod
         integer(HID_T)  :: type_id ! DataType identifier
         integer(HSIZE_T):: adims(1) !Attribut Dimension
         integer(kind=SIZE_T) :: HDFSIZE
-        integer(kind=I32), parameter :: RANK1=1
+        integer(kind=I32), parameter :: A_RANK=rank(val)
 
         obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_CHARACTER, type_id, hdferr)
@@ -365,7 +398,7 @@ module H5_Func_mod
         if( adims(1)==1 ) then
           call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         else
-          call H5screate_simple_f(RANK1, adims, space_id, hdferr)
+          call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         HDFSIZE=len(val)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
@@ -431,7 +464,7 @@ module H5_Func_mod
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
-        integer(kind=I32), parameter :: RANK1=1
+        integer(kind=I32), parameter :: A_RANK=rank(val)
 
         obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
@@ -439,7 +472,7 @@ module H5_Func_mod
         if( adims(1)==1 ) then
           call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         else
-          call H5screate_simple_f(RANK1, adims, space_id, hdferr)
+          call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
         call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
@@ -504,7 +537,7 @@ module H5_Func_mod
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 8 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
-        integer(kind=I32), parameter :: RANK1=1
+        integer(kind=I32), parameter :: A_RANK=rank(val)
 
         obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
@@ -512,7 +545,7 @@ module H5_Func_mod
         if( adims(1)==1 ) then
           call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         else
-          call H5screate_simple_f(RANK1, adims, space_id, hdferr)
+          call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
         call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
@@ -542,18 +575,18 @@ module H5_Func_mod
     end function Create_Empty_Dataset
 
 !##################################################################################################################################!
-    function Read_Int_1dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Int_1dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
+        integer(kind=I32), intent(out) :: data(:)
+        integer(kind=I32), parameter :: D_RANK=rank(data)
         character(len=255), intent(in) :: dset_name
-        integer(kind=I32), parameter :: RANK=1
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        integer(kind=I32), intent(out) :: out_array(:)
 
         offset_out = [0]
 
@@ -561,11 +594,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -573,18 +606,18 @@ module H5_Func_mod
     end function Read_Int_1dSlab
 
 !##################################################################################################################################!
-    function Read_Real_1dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Real_1dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer, parameter :: RANK=1
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        real(kind=SP), intent(out) :: data(:)
+        integer, parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        real(kind=SP), intent(out) :: out_array(:)
 
         offset_out = [0]
 
@@ -592,11 +625,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -604,18 +637,18 @@ module H5_Func_mod
     end function Read_Real_1dSlab
 
 !##################################################################################################################################!
-    function Read_Int_2dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Int_2dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer(kind=I32), parameter :: RANK=2
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        integer(kind=I32), intent(out) :: data(:,:)
+        integer(kind=I32), parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        integer(kind=I32), intent(out) :: out_array(:,:)
 
         offset_out = [0,0]
 
@@ -623,11 +656,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -635,18 +668,18 @@ module H5_Func_mod
     end function Read_Int_2dSlab
 
 !##################################################################################################################################!
-    function Read_Real_2dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Real_2dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer, parameter :: RANK=2
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        real(kind=SP), intent(out) :: data(:,:)
+        integer, parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        real(kind=SP), intent(out) :: out_array(:,:)
 
         offset_out = [0,0]
 
@@ -654,11 +687,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -666,18 +699,18 @@ module H5_Func_mod
     end function Read_Real_2dSlab
 
 !##################################################################################################################################!
-    function Read_Int_3dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Int_3dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer(kind=I32), parameter :: RANK=3
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        integer(kind=I32), intent(out) :: data(:,:,:)
+        integer(kind=I32), parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        integer(kind=I32), intent(out) :: out_array(:,:,:)
 
         offset_out = [0,0,0]
 
@@ -685,11 +718,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -697,18 +730,18 @@ module H5_Func_mod
     end function Read_Int_3dSlab
 
 !##################################################################################################################################!
-    function Read_Real_3dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Real_3dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer, parameter :: RANK=3
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        real(kind=SP), intent(out) :: data(:,:,:)
+        integer, parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        real(kind=SP), intent(out) :: out_array(:,:,:)
 
         offset_out = [0,0,0]
 
@@ -716,11 +749,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -728,18 +761,18 @@ module H5_Func_mod
     end function Read_Real_3dSlab
 
 !##################################################################################################################################!
-    function Read_Int_4dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Int_4dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer(kind=I32), parameter :: RANK=4
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        integer(kind=I32), intent(out) :: data(:,:,:,:)
+        integer(kind=I32), parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        integer(kind=I32), intent(out) :: out_array(:,:,:,:)
 
         offset_out = [0,0,0,0]
 
@@ -747,11 +780,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -759,18 +792,18 @@ module H5_Func_mod
     end function Read_Int_4dSlab
 
 !##################################################################################################################################!
-    function Read_Real_4dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Real_4dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer, parameter :: RANK=4
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        real(kind=SP), intent(out) :: data(:,:,:,:)
+        integer, parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        real(kind=SP), intent(out) :: out_array(:,:,:,:)
 
         offset_out = [0,0,0,0]
 
@@ -778,11 +811,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -790,18 +823,18 @@ module H5_Func_mod
     end function Read_Real_4dSlab
 
 !##################################################################################################################################!
-    function Read_Int_5dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Int_5dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer(kind=I32), parameter :: RANK=5
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        integer(kind=I32), intent(out) :: data(:,:,:,:,:)
+        integer(kind=I32), parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        integer(kind=I32), intent(out) :: out_array(:,:,:,:,:)
 
         offset_out = [0,0,0,0,0]
 
@@ -809,11 +842,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -821,18 +854,18 @@ module H5_Func_mod
     end function Read_Int_5dSlab
 
 !##################################################################################################################################!
-    function Read_Real_5dSlab(obj_id,dset_name,offset,dshape,out_array) result(ierr)
+    function Read_Real_5dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
         integer, intent(in) :: obj_id
         character(len=255), intent(in) :: dset_name
-        integer, parameter :: RANK=5
-        integer(kind=I64), intent(in) :: offset(RANK), dshape(RANK)
-        integer(kind=I64) :: offset_out(RANK)
+        real(kind=SP), intent(out) :: data(:,:,:,:,:)
+        integer, parameter :: D_RANK=rank(data)
+        integer(kind=I64), intent(in) :: offset(D_RANK), dshape(D_RANK)
+        integer(kind=I64) :: offset_out(D_RANK)
         integer :: ierr
         integer :: dset_id, dataspace, memspace
-        real(kind=SP), intent(out) :: out_array(:,:,:,:,:)
 
         offset_out = [0,0,0,0,0]
 
@@ -840,11 +873,11 @@ module H5_Func_mod
         call H5dget_space_f(dset_id, dataspace, ierr)
         call H5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, ierr)
 
-        call H5screate_simple_f(RANK, dshape, memspace, ierr)
+        call H5screate_simple_f(D_RANK, dshape, memspace, ierr)
 
         call H5sselect_hyperslab_f(memspace, H5S_SELECT_SET_F, offset_out, dshape, ierr)
 
-        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, out_array, dshape, ierr, memspace, dataspace)
+        call H5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dshape, ierr, memspace, dataspace)
 
         call H5sclose_f(dataspace, ierr)
         call H5sclose_f(memspace, ierr)
@@ -1156,14 +1189,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:)             ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(1)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 1
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1175,14 +1205,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:)           ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(2)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 2
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1194,14 +1221,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:)         ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(3)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 3
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1213,14 +1237,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:)       ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(4)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 4
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1232,14 +1253,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:,:)     ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(5)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 5
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1251,14 +1269,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:,:,:)   ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(6)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 6
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1275,7 +1290,6 @@ module H5_Func_mod
       integer :: ierr
 
       dims = (/ 0 /)
-
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1287,14 +1301,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:)            ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(1)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 1
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1306,14 +1317,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:)          ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(2)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 2
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1325,14 +1333,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:)        ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(3)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 3
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1344,14 +1349,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:)      ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(4)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 4
-      dims = shape(data, KIND=HID_T)
-
+      dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
@@ -1363,13 +1365,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:,:)    ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(5)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 5
-      dims = shape(data, KIND=HID_T)
+      dims = shape(data, kind=HID_T)
 
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
@@ -1382,13 +1382,11 @@ module H5_Func_mod
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:,:,:)  ! data to be written
 
-      integer :: rank
       integer(SIZE_T) :: dims(6)
       integer(HID_T) :: dset_id
       integer :: ierr
 
-      rank = 6
-      dims = shape(data, KIND=HID_T)
+      dims = shape(data, kind=HID_T)
 
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
@@ -1396,4 +1394,1678 @@ module H5_Func_mod
     end function hdf_read_dataset_double_6
 
 !##################################################################################################################################!
+    function Create_Int8_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I8), intent (in):: val(:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_1, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int8_1d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int16_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I16), intent (in):: val(:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int16_1d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I32), intent (in):: val(:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int32_1d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=SP), intent (in):: val(:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_4, real(fill_val, kind=SP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real32_1d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real64_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=DP), intent (in):: val(:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_8, real(fill_val, kind=DP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real64_1d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int8_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I8), intent (in):: val(:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_1, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int8_2d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int16_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I16), intent (in):: val(:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int16_2d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I32), intent (in):: val(:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int32_2d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=SP), intent (in):: val(:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_4, real(fill_val, kind=SP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real32_2d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real64_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=DP), intent (in):: val(:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_8, real(fill_val, kind=DP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real64_2d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int8_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I8), intent (in):: val(:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_1, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int8_3d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int16_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I16), intent (in):: val(:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int16_3d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I32), intent (in):: val(:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int32_3d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=SP), intent (in):: val(:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_4, real(fill_val, kind=SP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real32_3d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real64_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=DP), intent (in):: val(:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_8, real(fill_val, kind=DP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real64_3d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int8_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I8), intent (in):: val(:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_1, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int8_4d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int16_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I16), intent (in):: val(:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int16_4d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I32), intent (in):: val(:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int32_4d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=SP), intent (in):: val(:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_4, real(fill_val, kind=SP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real32_4d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real64_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=DP), intent (in):: val(:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_8, real(fill_val, kind=DP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real64_4d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int8_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I8), intent (in):: val(:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_1, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int8_5d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int16_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I16), intent (in):: val(:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int16_5d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I32), intent (in):: val(:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int32_5d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=SP), intent (in):: val(:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_4, real(fill_val, kind=SP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real32_5d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real64_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=DP), intent (in):: val(:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_8, real(fill_val, kind=DP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real64_5d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int8_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I8), intent (in):: val(:,:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_1, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int8_6d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int16_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I16), intent (in):: val(:,:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int16_6d_Dataset
+
+!##################################################################################################################################!
+    function Create_Int32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      integer(kind=I32), intent (in):: val(:,:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Int32_6d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=SP), intent (in):: val(:,:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_4, real(fill_val, kind=SP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real32_6d_Dataset
+
+!##################################################################################################################################!
+    function Create_Real64_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+      real(kind=DP), intent (in):: val(:,:,:,:,:,:)
+      integer , intent (in):: obj_id
+      integer(HID_T) :: dataset_id, space_id
+      character (len=*) , intent (in):: d_name
+      integer :: stat
+      integer :: hdferr
+      integer(kind=I32), parameter :: D_RANK=rank(val)
+      integer(HID_T)  :: type_id ! DataType identifier
+      integer(kind=I32), optional, intent(in) :: fill_val 
+      logical, optional, intent (in):: extendable
+      integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
+      integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
+      integer(kind=I64) :: chunk_size
+      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+                                               ! -> (MaxDimension is here used to enable extend for the time dimension)
+      integer(HID_T)  :: prp_id ! Property identifier
+
+      call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
+      
+      if( present(in_chunk_size) ) then
+          chunk_size=int(in_chunk_size,I64)
+      else
+          chunk_size=100
+      end if
+
+      adims = shape(val)
+      if (present(extendable) .and. extendable) then
+        max_dims(:D_RANK-1) = adims(:D_RANK-1)
+        max_dims(D_RANK) = H5S_UNLIMITED_F
+        call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, int(1,kind=I64)], hdferr)
+      else
+        max_dims = adims
+        if (minval(shape(val))>chunk_size) then
+          call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size, chunk_size, chunk_size, chunk_size, chunk_size], hdferr)
+        end if
+      end if
+      
+      if (present(comp_level)) then
+        call H5pset_deflate_f(prp_id, comp_level, hdferr)
+      end if
+      
+      call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
+      if (present(fill_val)) then
+        call H5pset_fill_value_f(prp_id, H5T_NATIVE_REAL_8, real(fill_val, kind=DP), hdferr)
+      end if
+
+      call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
+      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dataset_id,hdferr)
+      call H5tclose_f(type_id, hdferr)
+      call H5sclose_f(space_id, hdferr)
+    end function Create_Real64_6d_Dataset
+
 end module H5_Func_mod
