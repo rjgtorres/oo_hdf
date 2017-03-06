@@ -14,10 +14,10 @@ module Strings_Func_mod
 
       To_upper=str
       do i = 1, len(str)
-          select case(str(i:i))
-          case("a":"z")
-              To_upper(i:i) = achar(iachar(str(i:i))-32)
-          end select
+        select case(str(i:i))
+        case("a":"z")
+          To_upper(i:i) = achar(iachar(str(i:i))-32)
+        end select
       end do
     end function To_upper
 !------------------------------------------------------------------------
@@ -30,7 +30,7 @@ module Strings_Func_mod
       do i = 1, len(str)
         select case(str(i:i))
         case("A":"Z")
-            To_lower(i:i) = achar(iachar(str(i:i))+32)
+          To_lower(i:i) = achar(iachar(str(i:i))+32)
         end select
       end do
     end function To_lower
@@ -46,8 +46,8 @@ module Strings_Func_mod
       N_Lines=-1
 
       do while (io==0)
-          N_Lines = N_Lines + 1
-          read(nunit,*,iostat=io)
+        N_Lines = N_Lines + 1
+        read(nunit,*,iostat=io)
       end do
 
       close(nunit)
@@ -81,9 +81,9 @@ module Strings_Func_mod
       position_under(1) = scan(trim(filenamein(reset+1:name_len)), '_')
       position_under(1) = reset + position_under(1)
       if( name_spaces > 2 ) then
-          do i=2,name_spaces-1
-              position_under(i) = scan(trim(filenamein(sum(position_under(1:i-1))+1:name_len)), '_')
-          end do
+        do i=2,name_spaces-1
+          position_under(i) = scan(trim(filenamein(sum(position_under(1:i-1))+1:name_len)), '_')
+        end do
       end if
       position_under(name_spaces) = scan(trim(filenamein(sum(position_under(1:name_spaces-1))+1:name_len)), '.')
       if (position_under(name_spaces) == 0) then
@@ -92,9 +92,9 @@ module Strings_Func_mod
 
       field_names(1)=filenamein(reset+1:position_under(1)-1)
       if( name_spaces > 1 ) then
-          do i=2,name_spaces
-              field_names(i)=filenamein(sum(position_under(1:i-1))+1:sum(position_under(1:i))-1)
-          end do
+        do i=2,name_spaces
+          field_names(i)=filenamein(sum(position_under(1:i-1))+1:sum(position_under(1:i))-1)
+        end do
       end if
 
       deallocate(position_under)

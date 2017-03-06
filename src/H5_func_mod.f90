@@ -30,20 +30,20 @@ module H5_Func_mod
   end interface Create_Attr
 
   interface Read_Dset
-     module procedure hdf_read_dataset_integer_0
-     module procedure hdf_read_dataset_integer_1
-     module procedure hdf_read_dataset_integer_2
-     module procedure hdf_read_dataset_integer_3
-     module procedure hdf_read_dataset_integer_4
-     module procedure hdf_read_dataset_integer_5
-     module procedure hdf_read_dataset_integer_6
-     module procedure hdf_read_dataset_double_0
-     module procedure hdf_read_dataset_double_1
-     module procedure hdf_read_dataset_double_2
-     module procedure hdf_read_dataset_double_3
-     module procedure hdf_read_dataset_double_4
-     module procedure hdf_read_dataset_double_5
-     module procedure hdf_read_dataset_double_6
+     module procedure Read_Int_0d_dataset
+     module procedure Read_Int_1d_dataset
+     module procedure Read_Int_2d_dataset
+     module procedure Read_Int_3d_dataset
+     module procedure Read_Int_4d_dataset
+     module procedure Read_Int_5d_dataset
+     module procedure Read_Int_6d_dataset
+     module procedure Read_Real_0d_dataset
+     module procedure Read_Real_1d_dataset
+     module procedure Read_Real_2d_dataset
+     module procedure Read_Real_3d_dataset
+     module procedure Read_Real_4d_dataset
+     module procedure Read_Real_5d_dataset
+     module procedure Read_Real_6d_dataset
   end interface Read_Dset
 
   interface Create_Dset
@@ -79,8 +79,21 @@ module H5_Func_mod
     module procedure Create_Real64_6d_Dataset
   end interface Create_Dset
 
+  interface Read_Slab
+    module procedure Read_Int_1dSlab
+    module procedure Read_Int_2dSlab
+    module procedure Read_Int_3dSlab
+    module procedure Read_Int_4dSlab
+    module procedure Read_Int_5dSlab
+    module procedure Read_Real_1dSlab
+    module procedure Read_Real_2dSlab
+    module procedure Read_Real_3dSlab
+    module procedure Read_Real_4dSlab
+    module procedure Read_Real_5dSlab
+  end interface Read_Slab
+
   contains
-!##################################################################################################################################!
+!#################################################################################################!
   function hdf_open_file(filename, state, mode) result(file_id)
     integer(I32) :: file_id            !< HDF5 id of the file
     character(len=*), intent(in) :: filename        !< the HDF5 filename
@@ -122,7 +135,7 @@ module H5_Func_mod
 
   end function hdf_open_file
 
-!##################################################################################################################################!
+!#################################################################################################!
   function hdf_close_file(file_id) result(hdferror)
     integer(I32), intent(in) :: file_id  !< file id to be closed
     integer :: hdferror
@@ -131,7 +144,7 @@ module H5_Func_mod
     call h5close_f(hdferror)
   end function hdf_close_file
 
-!##################################################################################################################################!
+!#################################################################################################!
   function hdf_create_group(loc_id, group_name) result(grp_id)
     integer(I32), intent(in) :: loc_id         !< location id where to put the group
     character(len=*), intent(in) :: group_name   !< name of the group
@@ -141,7 +154,7 @@ module H5_Func_mod
     call h5gcreate_f(loc_id, group_name, grp_id, hdferror)
   end function hdf_create_group
 
-!##################################################################################################################################!
+!#################################################################################################!
   function hdf_open_group(loc_id, group_name) result(grp_id)
     integer(I32), intent(in) :: loc_id         !< location id where to put the group
     character(len=*), intent(in) :: group_name   !< name of the group
@@ -151,7 +164,7 @@ module H5_Func_mod
     call h5gopen_f(loc_id, group_name, grp_id, hdferror)
   end function hdf_open_group
 
-!##################################################################################################################################!
+!#################################################################################################!
   function hdf_close_group(grp_id) result(hdferror)
     integer(I32), intent(in) :: grp_id   !< id for the group
     integer :: hdferror
@@ -159,11 +172,11 @@ module H5_Func_mod
     call h5gclose_f(grp_id, hdferror)
   end function hdf_close_group
 
-!##################################################################################################################################!
-  function hdf_get_rank(loc_id, dset_name, D_RANK) result(hdferror)
+!#################################################################################################!
+  function hdf_get_rank(loc_id, dset_name, d_rank) result(hdferror)
     integer(I32), intent(in) :: loc_id        !< location id
     character(len=*), intent(in) :: dset_name   !< dataset name
-    integer, intent(out) :: D_RANK                !< rank of the dataset
+    integer, intent(out) :: d_rank                !< rank of the dataset
     integer(I32) :: dset_id, dspace_id
     integer :: hdferror
 
@@ -175,7 +188,7 @@ module H5_Func_mod
     call h5dclose_f(dset_id, hdferror)
   end function hdf_get_rank
 
-!##################################################################################################################################!
+!#################################################################################################!
   function hdf_get_dims(loc_id, dset_name, dims) result(hdferror)
     integer(I32), intent(in) :: loc_id        !< location id
     character(len=*), intent(in) :: dset_name   !< name of dataset
@@ -195,7 +208,7 @@ module H5_Func_mod
     call h5dclose_f(dset_id, hdferror)
   end function hdf_get_dims
 
-!##################################################################################################################################!
+!#################################################################################################!
     integer(I32) function Get_Obj_Id(file_id, d_name, d_idx, gr_id, stat)
       ! Returns an object identifier.
       ! If dataset name "d_name" or index "d_idx" is given, a
@@ -234,7 +247,7 @@ module H5_Func_mod
       if (present(stat)) stat = hdferr
     end function Get_Obj_Id
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_Attr0(file_id, name, val, d_name, d_idx, gr_id) result(stat)
         integer(kind=I16) , intent (in):: val
         integer , intent (in):: file_id
@@ -260,7 +273,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int16_Attr0
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_Attr1(file_id, name, val, d_name, d_idx, gr_id) result(stat)
         integer(kind=I16) , intent (in):: val(:)
         integer , intent (in):: file_id
@@ -291,7 +304,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int16_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_Attr0(file_id, name, val, d_name, d_idx, gr_id) result(stat)
         integer(kind=I32) , intent (in):: val
         integer , intent (in):: file_id
@@ -317,7 +330,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int32_Attr0
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_Attr1(file_id, name, val, d_name, d_idx, gr_id) result(stat)
         integer(kind=HID_T) , intent (in):: val(:)
         integer , intent (in):: file_id
@@ -348,7 +361,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int32_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Char_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         character(len=*), intent (in):: val
         integer , intent (in):: file_id
@@ -375,7 +388,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Char_Attr0
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Char_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         character(len=*), intent (in):: val(:)
         integer , intent (in):: file_id
@@ -407,7 +420,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Char_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -441,7 +454,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real32_Attr0
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -480,7 +493,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real32_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_Attr0(file_id, name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -514,7 +527,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real64_Attr0
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_Attr1(file_id, name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -553,7 +566,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real64_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Empty_Dataset(obj_id, d_name) result(stat)
         ! Creates an empty dataset with the only purpose of an attributes
         ! storage. (Here used to hold the spatial reference system
@@ -574,7 +587,7 @@ module H5_Func_mod
         call H5sclose_f(space_id, hdferr)
     end function Create_Empty_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Int_1dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -605,7 +618,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Int_1dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real_1dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -636,7 +649,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Real_1dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Int_2dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -667,7 +680,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Int_2dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real_2dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -698,7 +711,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Real_2dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Int_3dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -729,7 +742,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Int_3dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real_3dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -760,7 +773,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Real_3dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Int_4dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -791,7 +804,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Int_4dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real_4dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -822,7 +835,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Real_4dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Int_5dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -853,7 +866,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Int_5dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real_5dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
         ! Reads a section of a HDF5 dataset
         !
@@ -884,7 +897,7 @@ module H5_Func_mod
         call H5dclose_f(dset_id, ierr)
     end function Read_Real_5dSlab
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Char_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -919,7 +932,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Char_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Char_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -955,7 +968,7 @@ module H5_Func_mod
     end function Read_Char_Attr0
 
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real32_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -990,7 +1003,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Real32_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real32_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -1025,7 +1038,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Real32_Attr0
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real64_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -1060,7 +1073,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Real64_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Real64_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -1096,7 +1109,7 @@ module H5_Func_mod
     end function Read_Real64_Attr0
 
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Int_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -1131,7 +1144,7 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Int_Attr1
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Read_Int_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
@@ -1166,8 +1179,8 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Int_Attr0
 
-!##################################################################################################################################!
-    function hdf_read_dataset_integer_0(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Int_0d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data                ! data to be written
@@ -1181,10 +1194,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_integer_0
+    end function Read_Int_0d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_integer_1(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Int_1d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:)             ! data to be written
@@ -1197,10 +1210,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_integer_1
+    end function Read_Int_1d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_integer_2(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Int_2d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:)           ! data to be written
@@ -1213,10 +1226,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_integer_2
+    end function Read_Int_2d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_integer_3(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Int_3d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:)         ! data to be written
@@ -1229,10 +1242,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_integer_3
+    end function Read_Int_3d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_integer_4(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Int_4d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:)       ! data to be written
@@ -1245,10 +1258,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_integer_4
+    end function Read_Int_4d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_integer_5(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Int_5d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:,:)     ! data to be written
@@ -1261,10 +1274,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_integer_5
+    end function Read_Int_5d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_integer_6(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Int_6d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:,:,:)   ! data to be written
@@ -1277,10 +1290,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_integer_6
+    end function Read_Int_6d_dataset
     
-!##################################################################################################################################!
-    function hdf_read_dataset_double_0(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Real_0d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data               ! data to be written
@@ -1293,10 +1306,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_double_0
+    end function Read_Real_0d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_double_1(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Real_1d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:)            ! data to be written
@@ -1309,10 +1322,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_double_1
+    end function Read_Real_1d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_double_2(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Real_2d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:)          ! data to be written
@@ -1325,10 +1338,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_double_2
+    end function Read_Real_2d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_double_3(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Real_3d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:)        ! data to be written
@@ -1341,10 +1354,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_double_3
+    end function Read_Real_3d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_double_4(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Real_4d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:)      ! data to be written
@@ -1357,10 +1370,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_double_4
+    end function Read_Real_4d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_double_5(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Real_5d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:,:)    ! data to be written
@@ -1374,10 +1387,10 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_double_5
+    end function Read_Real_5d_dataset
 
-!##################################################################################################################################!
-    function hdf_read_dataset_double_6(loc_id, dset_name, data) result(ierr)
+!#################################################################################################!
+    function Read_Real_6d_dataset(loc_id, dset_name, data) result(ierr)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:,:,:)  ! data to be written
@@ -1391,9 +1404,9 @@ module H5_Func_mod
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
       call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function hdf_read_dataset_double_6
+    end function Read_Real_6d_dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int8_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I8), intent (in):: val(:)
       integer , intent (in):: obj_id
@@ -1448,7 +1461,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_1d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I16), intent (in):: val(:)
       integer , intent (in):: obj_id
@@ -1503,7 +1516,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_1d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I32), intent (in):: val(:)
       integer , intent (in):: obj_id
@@ -1558,7 +1571,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_1d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=SP), intent (in):: val(:)
       integer , intent (in):: obj_id
@@ -1613,7 +1626,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_1d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=DP), intent (in):: val(:)
       integer , intent (in):: obj_id
@@ -1668,7 +1681,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_1d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int8_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I8), intent (in):: val(:,:)
       integer , intent (in):: obj_id
@@ -1724,7 +1737,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_2d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I16), intent (in):: val(:,:)
       integer , intent (in):: obj_id
@@ -1780,7 +1793,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_2d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I32), intent (in):: val(:,:)
       integer , intent (in):: obj_id
@@ -1836,7 +1849,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_2d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=SP), intent (in):: val(:,:)
       integer , intent (in):: obj_id
@@ -1892,7 +1905,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_2d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=DP), intent (in):: val(:,:)
       integer , intent (in):: obj_id
@@ -1948,7 +1961,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_2d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int8_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I8), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
@@ -2004,7 +2017,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_3d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I16), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
@@ -2060,7 +2073,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_3d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I32), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
@@ -2116,7 +2129,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_3d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=SP), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
@@ -2172,7 +2185,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_3d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=DP), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
@@ -2228,7 +2241,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_3d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int8_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I8), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
@@ -2284,7 +2297,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_4d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I16), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
@@ -2340,7 +2353,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_4d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I32), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
@@ -2396,7 +2409,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_4d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=SP), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
@@ -2452,7 +2465,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_4d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=DP), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
@@ -2508,7 +2521,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_4d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int8_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I8), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2564,7 +2577,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_5d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I16), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2620,7 +2633,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_5d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I32), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2676,7 +2689,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_5d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=SP), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2732,7 +2745,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_5d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=DP), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2788,7 +2801,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_5d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int8_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I8), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2844,7 +2857,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_6d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int16_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I16), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2900,7 +2913,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_6d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Int32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       integer(kind=I32), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -2956,7 +2969,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_6d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=SP), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
@@ -3012,7 +3025,7 @@ module H5_Func_mod
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_6d_Dataset
 
-!##################################################################################################################################!
+!#################################################################################################!
     function Create_Real64_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
       real(kind=DP), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
