@@ -13,7 +13,8 @@ PROG=test_funcs
 LIST_MOD_F=\
 $(SRC)Types_mod.f90\
 $(SRC)Strings_Func_mod.f90\
-$(SRC)H5_func_mod.f90
+$(SRC)H5_func_mod.f90\
+$(SRC)H5_OO_mod.f90
 
 LIST_SUB_F=\
 

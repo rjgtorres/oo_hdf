@@ -141,8 +141,14 @@ module H5_Func_mod
     integer :: hdferror
 
     call h5fclose_f(file_id, hdferror)
-    call h5close_f(hdferror)
   end function hdf_close_file
+
+!#################################################################################################!
+  subroutine hdf_close(hdferror)
+    integer, intent(out) :: hdferror
+
+    call h5close_f(hdferror)
+  end subroutine hdf_close
 
 !#################################################################################################!
   function hdf_create_group(loc_id, group_name) result(grp_id)
@@ -248,49 +254,39 @@ module H5_Func_mod
     end function Get_Obj_Id
 
 !#################################################################################################!
-    function Create_Int16_Attr0(file_id, name, val, d_name, d_idx, gr_id) result(stat)
-        integer(kind=I16) , intent (in):: val
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: name
+    function Create_Int16_Attr0(obj_id, a_name, val) result(stat)
+        integer(kind=I16), intent (in):: val
+        integer, intent (in):: obj_id
+        character(len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 2 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int16_Attr0
 
 !#################################################################################################!
-    function Create_Int16_Attr1(file_id, name, val, d_name, d_idx, gr_id) result(stat)
-        integer(kind=I16) , intent (in):: val(:)
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: name
+    function Create_Int16_Attr1(obj_id, a_name, val) result(stat)
+        integer(kind=I16), intent (in):: val(:)
+        integer, intent(in):: obj_id
+        character(len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 2 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
         adims = shape(val, kind=HID_T)
         if( adims(1)==1 ) then
@@ -299,55 +295,45 @@ module H5_Func_mod
           call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int16_Attr1
 
 !#################################################################################################!
-    function Create_Int32_Attr0(file_id, name, val, d_name, d_idx, gr_id) result(stat)
+    function Create_Int32_Attr0(obj_id, a_name, val) result(stat)
         integer(kind=I32) , intent (in):: val
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: name
+        integer , intent (in):: obj_id
+        character (len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int32_Attr0
 
 !#################################################################################################!
-    function Create_Int32_Attr1(file_id, name, val, d_name, d_idx, gr_id) result(stat)
+    function Create_Int32_Attr1(obj_id, a_name, val) result(stat)
         integer(kind=HID_T) , intent (in):: val(:)
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: name
+        integer , intent (in):: obj_id
+        character (len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
         adims = shape(val, kind=HID_T)
         if( adims(1)==1 ) then
@@ -356,28 +342,23 @@ module H5_Func_mod
           call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int32_Attr1
 
 !#################################################################################################!
-    function Create_Char_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Create_Char_Attr0(obj_id, a_name, val) result(stat)
         character(len=*), intent (in):: val
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: a_name
+        integer , intent (in):: obj_id
+        character (len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: HDFSIZE
         integer(HSIZE_T):: adims(1) !Attribut Dimension
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_CHARACTER, type_id, hdferr)
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
@@ -389,23 +370,18 @@ module H5_Func_mod
     end function Create_Char_Attr0
 
 !#################################################################################################!
-    function Create_Char_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
-        character(len=*), intent (in):: val(:)
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: a_name
+    function Create_Char_Attr1(obj_id, a_name, val) result(stat)
+        character(len=*), intent (in) :: val(:)
+        integer, intent (in) :: obj_id
+        character(len=*), intent (in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(HSIZE_T):: adims(1) !Attribut Dimension
         integer(kind=SIZE_T) :: HDFSIZE
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_CHARACTER, type_id, hdferr)
         adims = shape(val, kind=HID_T)
         if( adims(1)==1 ) then
@@ -421,7 +397,7 @@ module H5_Func_mod
     end function Create_Char_Attr1
 
 !#################################################################################################!
-    function Create_Real32_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Create_Real32_Attr0(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -431,20 +407,15 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=SP) , intent (in):: val
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: a_name
+        integer, intent (in) :: obj_id
+        character (len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
@@ -455,7 +426,7 @@ module H5_Func_mod
     end function Create_Real32_Attr0
 
 !#################################################################################################!
-    function Create_Real32_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Create_Real32_Attr1(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -465,21 +436,16 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=SP) , intent (in):: val(:)
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: a_name
+        integer , intent (in):: obj_id
+        character (len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
         adims = shape(val, kind=HID_T)
         if( adims(1)==1 ) then
@@ -494,7 +460,7 @@ module H5_Func_mod
     end function Create_Real32_Attr1
 
 !#################################################################################################!
-    function Create_Real64_Attr0(file_id, name, val, d_name, d_idx, gr_id) result(stat)
+    function Create_Real64_Attr0(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -504,31 +470,26 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=DP), intent (in):: val
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: name
+        integer , intent (in):: obj_id
+        character (len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 8 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, type_id, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real64_Attr0
 
 !#################################################################################################!
-    function Create_Real64_Attr1(file_id, name, val, d_name, d_idx, gr_id) result(stat)
+    function Create_Real64_Attr1(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -538,21 +499,16 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=DP), intent (in):: val(:)
-        integer , intent (in):: file_id
-        character (len=*) , optional, intent (in):: name
+        integer , intent (in):: obj_id
+        character (len=*), intent (in):: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*) ,optional, intent (in):: d_name
-        integer(kind=I32) , optional, intent (in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) , parameter :: HDFSIZE = 8 ! DataType Size in Bytes
         integer(HSIZE_T):: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
         call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
         adims = shape(val, kind=HID_T)
         if( adims(1)==1 ) then
@@ -561,7 +517,7 @@ module H5_Func_mod
           call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, type_id, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real64_Attr1
@@ -898,7 +854,7 @@ module H5_Func_mod
     end function Read_Real_5dSlab
 
 !#################################################################################################!
-    function Read_Char_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Char_Attr1(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -908,20 +864,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         character(len=*), intent(out) :: val(:)
-        integer , intent (in) :: file_id
-        character (len=*), intent(in) :: a_name
+        integer, intent (in) :: obj_id
+        character(len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
@@ -933,7 +883,7 @@ module H5_Func_mod
     end function Read_Char_Attr1
 
 !#################################################################################################!
-    function Read_Char_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Char_Attr0(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -943,20 +893,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         character(len=*), intent(out) :: val
-        integer , intent (in) :: file_id
+        integer , intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
@@ -967,9 +911,8 @@ module H5_Func_mod
         call H5aclose_f(attr_id,hdferr)
     end function Read_Char_Attr0
 
-
 !#################################################################################################!
-    function Read_Real32_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Real32_Attr1(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -979,20 +922,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=SP), intent(out) :: val(:)
-        integer , intent (in) :: file_id
+        integer , intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
@@ -1004,7 +941,7 @@ module H5_Func_mod
     end function Read_Real32_Attr1
 
 !#################################################################################################!
-    function Read_Real32_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Real32_Attr0(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -1014,20 +951,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=SP), intent(out) :: val
-        integer , intent (in) :: file_id
+        integer , intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
@@ -1039,7 +970,7 @@ module H5_Func_mod
     end function Read_Real32_Attr0
 
 !#################################################################################################!
-    function Read_Real64_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Real64_Attr1(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -1049,20 +980,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=DP), intent(out) :: val(:)
-        integer , intent (in) :: file_id
+        integer , intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
@@ -1074,7 +999,7 @@ module H5_Func_mod
     end function Read_Real64_Attr1
 
 !#################################################################################################!
-    function Read_Real64_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Real64_Attr0(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -1084,20 +1009,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=DP), intent(out) :: val
-        integer , intent (in) :: file_id
+        integer , intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
@@ -1110,7 +1029,7 @@ module H5_Func_mod
 
 
 !#################################################################################################!
-    function Read_Int_Attr1(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Int_Attr1(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -1120,20 +1039,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         integer(kind=I32), intent(out) :: val(:)
-        integer , intent (in) :: file_id
+        integer , intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
@@ -1145,7 +1058,7 @@ module H5_Func_mod
     end function Read_Int_Attr1
 
 !#################################################################################################!
-    function Read_Int_Attr0(file_id, a_name, val, d_name, d_idx, gr_id) result(stat)
+    function Read_Int_Attr0(obj_id, a_name, val) result(stat)
         ! Returns the exit status of the HDF5 API when writing an attribute.
         ! If dataset name "d_name" or index "d_idx" is given, a
         ! dataset attribute is set from the dataset in file
@@ -1155,20 +1068,14 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         integer(kind=I32), intent(out) :: val
-        integer , intent (in) :: file_id
+        integer , intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
-        character (len=*), optional, intent(in) :: d_name
-        integer(kind=I32), optional, intent(in) :: d_idx
-        integer(HID_T), optional ,intent(in) :: gr_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: obj_id
         integer(HID_T)  :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
-
-        obj_id = get_obj_id(file_id, d_name, d_idx, gr_id, hdferr)
 
         call h5aopen_f(obj_id, a_name, attr_id, hdferr)
         call h5aget_type_f(attr_id, type_id, hdferr)
