@@ -528,7 +528,7 @@ module H5_Func_mod
         ! storage. (Here used to hold the spatial reference system
         ! attributes, 'grid_maping'.)
         integer , intent (in):: obj_id
-        integer(HID_T) :: dataset_id, space_id
+        integer(HID_T) :: dset_id, space_id
         character (len=*) , intent (in):: d_name
         integer :: stat
         integer :: hdferr
@@ -537,14 +537,14 @@ module H5_Func_mod
         adims = [0]
         call H5tcopy_f(H5T_NATIVE_CHARACTER, type_id, hdferr)
         call H5screate_simple_f(1, adims, space_id, hdferr)
-        call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, stat)
-        call H5dclose_f(dataset_id,hdferr)
+        call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, stat)
+        call H5dclose_f(dset_id,hdferr)
         call H5tclose_f(type_id, hdferr)
         call H5sclose_f(space_id, hdferr)
     end function Create_Empty_Dataset
 
 !#################################################################################################!
-    function Read_Int_1dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Int_1dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -575,7 +575,7 @@ module H5_Func_mod
     end function Read_Int_1dSlab
 
 !#################################################################################################!
-    function Read_Real_1dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Real_1dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -606,7 +606,7 @@ module H5_Func_mod
     end function Read_Real_1dSlab
 
 !#################################################################################################!
-    function Read_Int_2dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Int_2dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -637,7 +637,7 @@ module H5_Func_mod
     end function Read_Int_2dSlab
 
 !#################################################################################################!
-    function Read_Real_2dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Real_2dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -668,7 +668,7 @@ module H5_Func_mod
     end function Read_Real_2dSlab
 
 !#################################################################################################!
-    function Read_Int_3dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Int_3dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -699,7 +699,7 @@ module H5_Func_mod
     end function Read_Int_3dSlab
 
 !#################################################################################################!
-    function Read_Real_3dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Real_3dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -730,7 +730,7 @@ module H5_Func_mod
     end function Read_Real_3dSlab
 
 !#################################################################################################!
-    function Read_Int_4dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Int_4dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -761,7 +761,7 @@ module H5_Func_mod
     end function Read_Int_4dSlab
 
 !#################################################################################################!
-    function Read_Real_4dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Real_4dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -792,7 +792,7 @@ module H5_Func_mod
     end function Read_Real_4dSlab
 
 !#################################################################################################!
-    function Read_Int_5dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Int_5dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -823,7 +823,7 @@ module H5_Func_mod
     end function Read_Int_5dSlab
 
 !#################################################################################################!
-    function Read_Real_5dSlab(obj_id,dset_name,offset,dshape,data) result(ierr)
+    function Read_Real_5dSlab(obj_id,dset_name,offset,dshape,data) result(dset_id)
         ! Reads a section of a HDF5 dataset
         !
         implicit none
@@ -1087,7 +1087,7 @@ module H5_Func_mod
     end function Read_Int_Attr0
 
 !#################################################################################################!
-    function Read_Int_0d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Int_0d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data                ! data to be written
@@ -1104,7 +1104,7 @@ module H5_Func_mod
     end function Read_Int_0d_dataset
 
 !#################################################################################################!
-    function Read_Int_1d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Int_1d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:)             ! data to be written
@@ -1120,7 +1120,7 @@ module H5_Func_mod
     end function Read_Int_1d_dataset
 
 !#################################################################################################!
-    function Read_Int_2d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Int_2d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:)           ! data to be written
@@ -1136,7 +1136,7 @@ module H5_Func_mod
     end function Read_Int_2d_dataset
 
 !#################################################################################################!
-    function Read_Int_3d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Int_3d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:)         ! data to be written
@@ -1152,7 +1152,7 @@ module H5_Func_mod
     end function Read_Int_3d_dataset
 
 !#################################################################################################!
-    function Read_Int_4d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Int_4d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:)       ! data to be written
@@ -1168,7 +1168,7 @@ module H5_Func_mod
     end function Read_Int_4d_dataset
 
 !#################################################################################################!
-    function Read_Int_5d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Int_5d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:,:)     ! data to be written
@@ -1184,7 +1184,7 @@ module H5_Func_mod
     end function Read_Int_5d_dataset
 
 !#################################################################################################!
-    function Read_Int_6d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Int_6d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       integer, intent(out) :: data(:,:,:,:,:,:)   ! data to be written
@@ -1200,7 +1200,7 @@ module H5_Func_mod
     end function Read_Int_6d_dataset
     
 !#################################################################################################!
-    function Read_Real_0d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Real_0d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data               ! data to be written
@@ -1216,7 +1216,7 @@ module H5_Func_mod
     end function Read_Real_0d_dataset
 
 !#################################################################################################!
-    function Read_Real_1d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Real_1d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:)            ! data to be written
@@ -1232,7 +1232,7 @@ module H5_Func_mod
     end function Read_Real_1d_dataset
 
 !#################################################################################################!
-    function Read_Real_2d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Real_2d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:)          ! data to be written
@@ -1248,7 +1248,7 @@ module H5_Func_mod
     end function Read_Real_2d_dataset
 
 !#################################################################################################!
-    function Read_Real_3d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Real_3d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:)        ! data to be written
@@ -1264,7 +1264,7 @@ module H5_Func_mod
     end function Read_Real_3d_dataset
 
 !#################################################################################################!
-    function Read_Real_4d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Real_4d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:)      ! data to be written
@@ -1280,7 +1280,7 @@ module H5_Func_mod
     end function Read_Real_4d_dataset
 
 !#################################################################################################!
-    function Read_Real_5d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Real_5d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:,:)    ! data to be written
@@ -1297,7 +1297,7 @@ module H5_Func_mod
     end function Read_Real_5d_dataset
 
 !#################################################################################################!
-    function Read_Real_6d_dataset(loc_id, dset_name, data) result(ierr)
+    function Read_Real_6d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
       real(dp), intent(out) :: data(:,:,:,:,:,:)  ! data to be written
@@ -1314,10 +1314,10 @@ module H5_Func_mod
     end function Read_Real_6d_dataset
 
 !#################################################################################################!
-    function Create_Int8_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int8_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I8), intent (in):: val(:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1351,7 +1351,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1361,18 +1361,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_1d_Dataset
 
 !#################################################################################################!
-    function Create_Int16_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int16_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I16), intent (in):: val(:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1406,7 +1406,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1416,18 +1416,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_1d_Dataset
 
 !#################################################################################################!
-    function Create_Int32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I32), intent (in):: val(:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1443,7 +1443,7 @@ module H5_Func_mod
       integer(HID_T)  :: prp_id ! Property identifier
 
       call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
-      
+
       if( present(in_chunk_size) ) then
           chunk_size=int(in_chunk_size,I64)
       else
@@ -1460,29 +1460,29 @@ module H5_Func_mod
           call H5pset_chunk_f(prp_id, D_RANK, [chunk_size], hdferr)
         end if
       end if
-      
-      if (present(comp_level)) then
+
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
-      
+
       call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
       if (present(fill_val)) then
         call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_1d_Dataset
 
 !#################################################################################################!
-    function Create_Real32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=SP), intent (in):: val(:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1516,7 +1516,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1526,18 +1526,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_1d_Dataset
 
 !#################################################################################################!
-    function Create_Real64_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real64_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=DP), intent (in):: val(:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1571,7 +1571,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1581,18 +1581,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_1d_Dataset
 
 !#################################################################################################!
-    function Create_Int8_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int8_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I8), intent (in):: val(:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1608,7 +1608,7 @@ module H5_Func_mod
       integer(HID_T)  :: prp_id ! Property identifier
 
       call H5pcreate_f(H5P_DATASET_CREATE_F, prp_id, hdferr)
-      
+
       if( present(in_chunk_size) ) then
           chunk_size=int(in_chunk_size,I64)
       else
@@ -1626,29 +1626,29 @@ module H5_Func_mod
           call H5pset_chunk_f(prp_id, D_RANK, [chunk_size, chunk_size], hdferr)
         end if
       end if
-      
-      if (present(comp_level)) then
+
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
-      
+
       call H5tcopy_f(H5T_NATIVE_INTEGER_1, type_id, hdferr)
       if (present(fill_val)) then
         call H5pset_fill_value_f(prp_id, H5T_NATIVE_INTEGER_4, fill_val, hdferr)
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_2d_Dataset
 
 !#################################################################################################!
-    function Create_Int16_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int16_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I16), intent (in):: val(:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1683,7 +1683,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1693,18 +1693,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_2d_Dataset
 
 !#################################################################################################!
-    function Create_Int32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I32), intent (in):: val(:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1739,7 +1739,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1749,18 +1749,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_2d_Dataset
 
 !#################################################################################################!
-    function Create_Real32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=SP), intent (in):: val(:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1795,7 +1795,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1805,18 +1805,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_2d_Dataset
 
 !#################################################################################################!
-    function Create_Real64_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real64_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=DP), intent (in):: val(:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1851,7 +1851,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1861,18 +1861,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_2d_Dataset
 
 !#################################################################################################!
-    function Create_Int8_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int8_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I8), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1907,7 +1907,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1917,18 +1917,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_3d_Dataset
 
 !#################################################################################################!
-    function Create_Int16_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int16_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I16), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -1963,7 +1963,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -1973,18 +1973,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_3d_Dataset
 
 !#################################################################################################!
-    function Create_Int32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I32), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2019,7 +2019,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2029,18 +2029,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_3d_Dataset
 
 !#################################################################################################!
-    function Create_Real32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=SP), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2075,7 +2075,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2085,18 +2085,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_3d_Dataset
 
 !#################################################################################################!
-    function Create_Real64_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real64_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=DP), intent (in):: val(:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2131,7 +2131,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2141,18 +2141,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_3d_Dataset
 
 !#################################################################################################!
-    function Create_Int8_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int8_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I8), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2187,7 +2187,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2197,18 +2197,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_4d_Dataset
 
 !#################################################################################################!
-    function Create_Int16_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int16_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I16), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2243,7 +2243,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2253,18 +2253,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_4d_Dataset
 
 !#################################################################################################!
-    function Create_Int32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I32), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2299,7 +2299,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2309,18 +2309,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_4d_Dataset
 
 !#################################################################################################!
-    function Create_Real32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=SP), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2355,7 +2355,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2365,18 +2365,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_4d_Dataset
 
 !#################################################################################################!
-    function Create_Real64_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real64_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=DP), intent (in):: val(:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2411,7 +2411,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2421,18 +2421,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_4d_Dataset
 
 !#################################################################################################!
-    function Create_Int8_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int8_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I8), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2467,7 +2467,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2477,18 +2477,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_5d_Dataset
 
 !#################################################################################################!
-    function Create_Int16_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int16_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I16), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2523,7 +2523,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2533,18 +2533,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_5d_Dataset
 
 !#################################################################################################!
-    function Create_Int32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I32), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2579,7 +2579,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2589,18 +2589,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_5d_Dataset
 
 !#################################################################################################!
-    function Create_Real32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=SP), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2635,7 +2635,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2645,18 +2645,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_5d_Dataset
 
 !#################################################################################################!
-    function Create_Real64_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real64_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=DP), intent (in):: val(:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2691,7 +2691,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2701,18 +2701,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_5d_Dataset
 
 !#################################################################################################!
-    function Create_Int8_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int8_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I8), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2747,7 +2747,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2757,18 +2757,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int8_6d_Dataset
 
 !#################################################################################################!
-    function Create_Int16_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int16_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I16), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2803,7 +2803,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2813,18 +2813,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int16_6d_Dataset
 
 !#################################################################################################!
-    function Create_Int32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Int32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I32), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2859,7 +2859,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2869,18 +2869,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Int32_6d_Dataset
 
 !#################################################################################################!
-    function Create_Real32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=SP), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2915,7 +2915,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2925,18 +2925,18 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_4, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real32_6d_Dataset
 
 !#################################################################################################!
-    function Create_Real64_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(stat)
+    function Create_Real64_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       real(kind=DP), intent (in):: val(:,:,:,:,:,:)
       integer , intent (in):: obj_id
-      integer(HID_T) :: dataset_id, space_id
+      integer(HID_T) :: dset_id, space_id
       character (len=*) , intent (in):: d_name
       integer :: stat
       integer :: hdferr
@@ -2971,7 +2971,7 @@ module H5_Func_mod
         end if
       end if
       
-      if (present(comp_level)) then
+      if (present(comp_level) .and. minval(shape(val))>chunk_size) then
         call H5pset_deflate_f(prp_id, comp_level, hdferr)
       end if
       
@@ -2981,11 +2981,26 @@ module H5_Func_mod
       end if
 
       call H5screate_simple_f(D_RANK, adims, space_id, hdferr, max_dims)
-      call H5dcreate_f(obj_id, d_name, type_id, space_id, dataset_id, hdferr, prp_id)
-      call H5dwrite_f(dataset_id, H5T_NATIVE_REAL_8, val, adims, stat)
-      call H5dclose_f(dataset_id,hdferr)
+      call H5dcreate_f(obj_id, d_name, type_id, space_id, dset_id, hdferr, prp_id)
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, adims, stat)
+      call H5dclose_f(dset_id,hdferr)
       call H5tclose_f(type_id, hdferr)
       call H5sclose_f(space_id, hdferr)
     end function Create_Real64_6d_Dataset
+
+  function open_dset(loc_id, dset_name) result(dset_id)
+    integer(HID_T), intent(in) :: loc_id        ! local id in file
+    character(len=*), intent(in) :: dset_name   ! name of dataset
+    integer(HID_T) :: dset_id
+    integer :: ierr
+
+    call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+  end function open_dset
+
+  function close_dset(dset_id) result(ierr)
+    integer(HID_T), intent(in) :: dset_id
+    integer :: ierr
+    call h5dclose_f(dset_id, ierr)
+  end function close_dset
 
 end module H5_Func_mod

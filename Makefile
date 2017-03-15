@@ -6,9 +6,11 @@
 #
 
 SRC=src/
+TEST=tests/
 
 #PROG=wrapper
-PROG=test_funcs
+TEST1=test_funcs
+TEST2=test_objs
 
 LIST_MOD_F=\
 $(SRC)Types_mod.f90\
@@ -49,10 +51,20 @@ FC = gfortran
 #options for
 FFLAGS= -fbounds-check -O0 -fconvert=big-endian -finit-local-zero -cpp -DLITTLE_ENDIAN -Wsurprising -ffree-line-length-none -I $(DIRLIBRARY_H)/$(INC) -I $(DIRLIBRARY_H)/$(LIB) 
 
-$(PROG).exe: $(SRC)$(PROG).o $(LIST_MOD_O) $(LIST_SUB_O) \
+$(TEST1).exe: $(TEST)$(TEST1).o $(LIST_MOD_O) $(LIST_SUB_O) \
 	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HF).a \
 	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_H).a 
-	$(FC) $(FFLAGS) $(SRC)$(PROG).o $(LIST_MOD_O) $(LIST_SUB_O) \
+	$(FC) $(FFLAGS) $(TEST)$(TEST1).o $(LIST_MOD_O) $(LIST_SUB_O) \
+	-L$(DIRLIBRARY_H)/$(LIB) \
+	-l$(LIBRARY_HF) \
+	-L$(DIRLIBRARY_H)/$(LIB) \
+	-l$(LIBRARY_H) \
+	-o $@
+
+$(TEST2).exe: $(TEST)$(TEST2).o $(LIST_MOD_O) $(LIST_SUB_O) \
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HF).a \
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_H).a 
+	$(FC) $(FFLAGS) $(TEST)$(TEST2).o $(LIST_MOD_O) $(LIST_SUB_O) \
 	-L$(DIRLIBRARY_H)/$(LIB) \
 	-l$(LIBRARY_HF) \
 	-L$(DIRLIBRARY_H)/$(LIB) \
@@ -65,7 +77,7 @@ $(PROG).exe: $(SRC)$(PROG).o $(LIST_MOD_O) $(LIST_SUB_O) \
 #	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HFL).a 
 
 clean:
-	rm -f $(SRC)*.o *.exe *.mod *.o
+	rm -f $(SRC)*.o $(TEST)*.o *.exe *.mod *.o
 
 mod:
 	$(FC) -c $(FFLAGS) $(LIST_MOD_F)
