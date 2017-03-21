@@ -58,12 +58,8 @@ implicit none
     contains
       procedure, public :: setGroup
       procedure, public :: closeGroup
-      procedure, public :: initDset
+      procedure, public :: openGroup
   end type H5Group
-
-  interface H5Group
-    procedure newH5Group
-  end interface H5Group
 
 !#################################################################################################!
   type, extends(H5Group) :: H5File
@@ -207,6 +203,10 @@ implicit none
                     get_Real_Slab5d
 
   end type H5Dataset
+
+  interface H5Dataset
+    procedure newH5Dataset
+  end interface H5Dataset
 
 !#################################################################################################!
 
@@ -523,14 +523,13 @@ end subroutine get_Real64_Attr1
 !#################################################################################################!
 !######################################## Group Methods ##########################################!
 !#################################################################################################!
-function newH5Group( parent_id, g_name )
-  type(H5Group) :: newH5Group
-  integer(kind=I32), intent(in) :: parent_id
+subroutine openGroup(self, g_name, newGroup)
+  class(H5Group) :: self
+  type(H5Group), intent(out) :: newGroup
   character(len=*), intent(in) :: g_name
-  integer(kind=I32) :: error
 
-  newH5Group%id = hdf_open_group(parent_id, g_name)
-end function newH5Group
+  newGroup%id = hdf_open_group(self%id, g_name)
+end subroutine openGroup
 
 subroutine setGroup(self, g_name, newGroup)
   class(H5Group) :: self
@@ -567,22 +566,23 @@ subroutine closeFile( self )
   error = hdf_close_file(self%id)
 end subroutine closeFile
 
-subroutine initDset(self, newDataset, dset_name)
-  class(H5Group) :: self
-  type(H5Dataset), intent(out) :: newDataset
-  character(len=*), intent(in) :: dset_name
-
-  newDataset%d_name            = dset_name
-  newDataset%parent_id         = self%id
-  newDataset%compression_level = 9
-  newDataset%chunk_size        = 100
-  newDataset%extendable        = .false.
-  newDataset%fill_value        = 0
-end subroutine initDset
 
 !#################################################################################################!
 !######################################## Dataset Methods ########################################!
 !#################################################################################################!
+function newH5Dataset(dset_name, parent_Group)
+  type(H5Dataset) :: newH5Dataset
+  character(len=*), intent(in) :: dset_name
+  class(H5Group), intent(in) :: parent_Group
+
+  newH5Dataset%d_name            = dset_name
+  newH5Dataset%parent_id         = parent_Group%id
+  newH5Dataset%compression_level = 9
+  newH5Dataset%chunk_size        = 100
+  newH5Dataset%extendable        = .false.
+  newH5Dataset%fill_value        = 0
+end function newH5Dataset
+
 subroutine get_Int_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(out) :: val(:)
@@ -816,240 +816,240 @@ subroutine set_Int8_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I8), intent(in) :: val(:)
 
-  self%id = Create_Int8_1d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int8_1d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int8_1d
 
 subroutine set_Int16_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I16), intent(in) :: val(:)
 
-  self%id = Create_Int16_1d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int16_1d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int16_1d
 
 subroutine set_Int32_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(in) :: val(:)
 
-  self%id = Create_Int32_1d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int32_1d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int32_1d
 
 subroutine set_Real32_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=SP), intent(in) :: val(:)
 
-  self%id = Create_Real32_1d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real32_1d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real32_1d
 
 subroutine set_Real64_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(in) :: val(:)
 
-  self%id = Create_Real64_1d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real64_1d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_1d
 
 subroutine set_Int8_2d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I8), intent(in) :: val(:,:)
 
-  self%id = Create_Int8_2d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int8_2d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int8_2d
 
 subroutine set_Int16_2d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I16), intent(in) :: val(:,:)
 
-  self%id = Create_Int16_2d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int16_2d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int16_2d
 
 subroutine set_Int32_2d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(in) :: val(:,:)
 
-  self%id = Create_Int32_2d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int32_2d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int32_2d
 
 subroutine set_Real32_2d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=SP), intent(in) :: val(:,:)
 
-  self%id = Create_Real32_2d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real32_2d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real32_2d
 
 subroutine set_Real64_2d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(in) :: val(:,:)
 
-  self%id = Create_Real64_2d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real64_2d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_2d
 
 subroutine set_Int8_3d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I8), intent(in) :: val(:,:,:)
 
-  self%id = Create_Int8_3d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int8_3d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int8_3d
 
 subroutine set_Int16_3d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I16), intent(in) :: val(:,:,:)
 
-  self%id = Create_Int16_3d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int16_3d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int16_3d
 
 subroutine set_Int32_3d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(in) :: val(:,:,:)
 
-  self%id = Create_Int32_3d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int32_3d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int32_3d
 
 subroutine set_Real32_3d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=SP), intent(in) :: val(:,:,:)
 
-  self%id = Create_Real32_3d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real32_3d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real32_3d
 
 subroutine set_Real64_3d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(in) :: val(:,:,:)
 
-  self%id = Create_Real64_3d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real64_3d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_3d
 
 subroutine set_Int8_4d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I8), intent(in) :: val(:,:,:,:)
 
-  self%id = Create_Int8_4d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int8_4d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int8_4d
 
 subroutine set_Int16_4d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I16), intent(in) :: val(:,:,:,:)
 
-  self%id = Create_Int16_4d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int16_4d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int16_4d
 
 subroutine set_Int32_4d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(in) :: val(:,:,:,:)
 
-  self%id = Create_Int32_4d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int32_4d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int32_4d
 
 subroutine set_Real32_4d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=SP), intent(in) :: val(:,:,:,:)
 
-  self%id = Create_Real32_4d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real32_4d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real32_4d
 
 subroutine set_Real64_4d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(in) :: val(:,:,:,:)
 
-  self%id = Create_Real64_4d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real64_4d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_4d
 
 subroutine set_Int8_5d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I8), intent(in) :: val(:,:,:,:,:)
 
-  self%id = Create_Int8_5d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int8_5d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int8_5d
 
 subroutine set_Int16_5d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I16), intent(in) :: val(:,:,:,:,:)
 
-  self%id = Create_Int16_5d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int16_5d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int16_5d
 
 subroutine set_Int32_5d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(in) :: val(:,:,:,:,:)
 
-  self%id = Create_Int32_5d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int32_5d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int32_5d
 
 subroutine set_Real32_5d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=SP), intent(in) :: val(:,:,:,:,:)
 
-  self%id = Create_Real32_5d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real32_5d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real32_5d
 
 subroutine set_Real64_5d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(in) :: val(:,:,:,:,:)
 
-  self%id = Create_Real64_5d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real64_5d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_5d
 
 subroutine set_Int8_6d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I8), intent(in) :: val(:,:,:,:,:,:)
 
-  self%id = Create_Int8_6d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int8_6d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int8_6d
 
 subroutine set_Int16_6d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I16), intent(in) :: val(:,:,:,:,:,:)
 
-  self%id = Create_Int16_6d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int16_6d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int16_6d
 
 subroutine set_Int32_6d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(in) :: val(:,:,:,:,:,:)
 
-  self%id = Create_Int32_6d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Int32_6d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Int32_6d
 
 subroutine set_Real32_6d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=SP), intent(in) :: val(:,:,:,:,:,:)
 
-  self%id = Create_Real32_6d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real32_6d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real32_6d
 
 subroutine set_Real64_6d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(in) :: val(:,:,:,:,:,:)
 
-  self%id = Create_Real64_6d_Dataset((self%parent_id, self%d_name, val, self%fill_value, &
-                                        self%chunk_size, self%compression_level, self%extendable))
+  self%id = Create_Real64_6d_Dataset(self%parent_id, self%d_name, val, self%fill_value, &
+                                        self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_6d
 
 
