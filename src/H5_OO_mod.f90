@@ -583,6 +583,12 @@ function newH5Dataset(dset_name, parent_Group)
   newH5Dataset%fill_value        = 0
 end function newH5Dataset
 
+subroutine setEmpty(self)
+  class(H5Dataset), intent(inout) :: self
+
+  self%id=Create_Empty_Dataset(self%parent_id,self%d_name)
+end subroutine setEmpty
+
 subroutine get_Int_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   integer(kind=I32), intent(out) :: val(:)

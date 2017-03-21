@@ -523,7 +523,7 @@ module H5_Func_mod
     end function Create_Real64_Attr1
 
 !#################################################################################################!
-    function Create_Empty_Dataset(obj_id, d_name) result(stat)
+    function Create_Empty_Dataset(obj_id, d_name) result(dset_id)
         ! Creates an empty dataset with the only purpose of an attributes
         ! storage. (Here used to hold the spatial reference system
         ! attributes, 'grid_maping'.)
