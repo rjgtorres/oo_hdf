@@ -188,3 +188,15 @@ Write an attribute:
   call f1%closeFile()
   
   ```
+
+###TODO
+
+More tests.
+
+One example of the definition of a netCDF file with this library.
+
+A way to write blocks of arrays.
+
+A way to define more than one dimension to be extensible.
+
+Implement more functions of the HDF5 library.
