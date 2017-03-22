@@ -18,10 +18,10 @@ There are two main classes, *H5Group* and *H5Dataset*. The *H5File* is extended 
   type(H5File) :: file
   
   file = H5File(' path of the file ', status, mode)
-  ``` 
-status can be: (OLD, O, NEW, N, REPLACE, RP), not case sensitive
+!status can be: (OLD, O, NEW, N, REPLACE, RP), not case sensitive
+!mode can be: (READ, R, WRITE, W, READWRITE, RW), not case sensitive
 
-mode can be: (READ, R, WRITE, W, READWRITE, RW), not case sensitive
+``` 
 
   ```fortran 
   call file%closeFile()
@@ -32,15 +32,14 @@ mode can be: (READ, R, WRITE, W, READWRITE, RW), not case sensitive
   type(H5Group) :: oldgroup
   ```
   This class must always be called from an object of the same class (H5Group or H5File)
-  ```fortran 
-  call file%setGroup('name of the new group, newgroup)
-  call newgroup%openGroup('name of an existing group, oldgroup)
+  ```fortran
+  call file%setGroup('name of the new group', newgroup)
+  call newgroup%openGroup('name of an existing group', oldgroup)
   call oldgroup%closeGroup()
   ```
  #### H5Dataset
   ```fortran 
   type(H5Dataset) :: newdataset
-  
   newdataset = H5Dataset('Name of the dataset', parent group)
   ```
 Define the chunk size of the dataset:
@@ -68,16 +67,65 @@ Define an empty dataset:
   ```fortran 
   call newdataset%setEmpty()
   ```
-
-
-
-
-
-
-
-
+Get the dataset rank:
   ```fortran 
-  
+  call newdataset%getRank(rank)
+  !rank is an integer
+  ```
+
+Get the dataset dimensions:
+  ```fortran 
+  call newdataset%getDims(dims)
+  !Dims must be an integer array with the dataset rank
+  ```
+Read the entire dataset:
+  ```fortran 
+  call newdataset%getDataset(dset_array)
+  !dset_array can be an array of 1 to 6 dimensions
+  !dset_array can be an integer of 32 bits or a real of 64 bits
+  !the dataset inside the file can be of any kind lower or equal of those.
+  ```
+Read a block of a dataset:
+  ```fortran 
+  call newdataset%getBlock(offset, shape, d_array)
+  !offset is a one dimension integer of 64 bits array with the size of the rank of the dataset to read,
+  !this array must have the starting points of where you will read the array
+  !
+  !shape is a one dimension integer of 64 bits array with the size of the rank of the dataset to read,
+  !this array must have the size of the portion the array you want to read
+  !
+  !dset_array can be an array of 1 to 5 dimensions
+  !dset_array can be an integer or a real of 32 bits
+  !the dataset inside the file can be of any kind lower or equal of those.
+  ```
+Write a Dataset:
+  ```fortran 
+  call newdataset%setDataset(d_array)
+  !dset_array can be an array of 1 to 6 dimensions
+  !dset_array can be an integer of 8, 16 or 32 bits
+  !dset_array can be a real of 32 or 64 bits
+  ```
+
+#### H5Attributable
+This class is only accessed from an object of class H5Group or H5Dataset.
+
+Read an attribute:
+  ```fortran 
+  call newdataset%getAttribute(a_name, val)
+  call file%getAttribute(a_name, val)
+  call newgroup%getAttribute(a_name, val)
+  !a_name is the name of the attribute to read
+  !val can be of type character, integer or real(32 or 64 bits)
+  !val can be a scalar or an array of one dimension.
+  ```
+Write an attribute:
+  ```fortran 
+  call newdataset%setAttribute(a_name, val)
+  call file%setAttribute(a_name, val)
+  call newgroup%setAttribute(a_name, val)
+  !a_name is the name of the attribute to read
+  !val can be of type character, integer or real(32 or 64 bits)
+  !val can be a scalar or an array of one dimension.
   ```
 
 ### Examples:
