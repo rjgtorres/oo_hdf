@@ -4,4 +4,139 @@ Object oriented fortran HDF5 module
 This library aims to create a group of classes in fortran to interact with [HDF5](https://support.hdfgroup.org/HDF5/).
 
 ### Contents:
-This library as two main files, one with 
+This library as two main files, one with high level hdf5 routines **(H5_func_mod.f90)**, the other with classes wrapping those routines **(H5_OO_mod.f90)**.
+
+The function module was inspired, extends and has several of the functions present in [HDF5_utils](https://github.com/tiasus/HDF5_utils).
+
+The classes module has the same base structure of [mo_netcdf](https://github.com/rjgtorres/mo_netcdf).
+
+There are two main classes, *H5Group* and *H5Dataset*. The *H5File* is extended from the *H5Group*. All classes can read and write attributes from the *H5Attributable* class.
+
+### Interface
+ #### H5File
+  ```fortran 
+  type(H5File) :: file
+  
+  file = H5File(' path of the file ', status, mode)
+  ``` 
+status can be: (OLD, O, NEW, N, REPLACE, RP), not case sensitive
+
+mode can be: (READ, R, WRITE, W, READWRITE, RW), not case sensitive
+
+  ```fortran 
+  call file%closeFile()
+  ``` 
+ #### H5Group
+  ```fortran 
+  type(H5Group) :: newgroup
+  type(H5Group) :: oldgroup
+  ```
+  This class must always be called from an object of the same class (H5Group or H5File)
+  ```fortran 
+  call file%setGroup('name of the new group, newgroup)
+  call newgroup%openGroup('name of an existing group, oldgroup)
+  call oldgroup%closeGroup()
+  ```
+ #### H5Dataset
+  ```fortran 
+  type(H5Dataset) :: newdataset
+  
+  newdataset = H5Dataset('Name of the dataset', parent group)
+  ```
+Define the chunk size of the dataset:
+  ```fortran 
+  call newdataset%setChunkSize(chunksize)
+  ! chunksize is an integer, if not defined is by default 100
+  ```
+
+Define the compression level of the dataset:
+  ```fortran 
+  call newdataset%setCompressionLevel(CompressionLevel)
+  ! CompressionLevel is an integer that must vary between 0 and 9, if not defined is by default 9
+  ```
+Define the fill value of the dataset:
+  ```fortran 
+  call newdataset%setFillValue(fillvalue)
+  ! fillvalue is an integer, if not defined is by default 0
+  ```
+
+Define the dataset is extendable in one of its dimentions:
+  ```fortran 
+  call newdataset%setExtendable()
+```
+Define an empty dataset:
+  ```fortran 
+  call newdataset%setEmpty()
+  ```
+
+
+
+
+
+
+
+
+  ```fortran 
+  
+  ```
+
+### Examples:
+ - Write file, dataset and attribute:
+ 
+ ```fortran
+
+  type(H5File) :: f1
+  type(H5Dataset) :: d1, d2
+  type(H5Group) :: g1
+ 
+  !Open a new, write only, file
+  f1=H5File("new_test_file.h5", "N", "W")
+  !write an attribute in /
+  call f1%setAttribute('root_atribute',42)
+  !initialize a dataset in /
+  d1=H5Dataset('2d_i32',f1)
+  !set the fillvalue of d1 dataset to -1
+  call d1%setFillValue(-1)
+  !define a new group in /
+  call f1%setGroup('newgroup',g1)
+  !initialize a dataset in group "newgroup"
+  d2=H5Dataset('4d_r64',g1)
+
+  do i=1,size(test_arr(:,1))
+    do j=1,size(test_arr(1,:))
+      test_arr(i,j)=i*j
+    end do
+  end do
+  !write the contents of test_arr to d1 dataset in 8 bits precision
+  call d1%setDataset(int(test_arr,1))
+  !write an attribute in d1 dataset
+  call d1%setAttribute('dataset_atribute',int(42,2))
+  !write one array in double precision to d2 dataset
+  call d2%setDataset(real([[1],[2],[4],[5]],DP))
+  !write an attribute in group g1
+  call g2%setAttribute('att1', int([4,4,2,5,4,6,3,1,1,5,5,2,4,2154545,6,2,4,7,6],4))
+  !close hdf5 file
+  call f1%closeFile()
+ ```
+ 
+  - Read the contents of a HDF5 file:
+  
+  ```fortran
+  !Open an existing, read only, file
+  f1=H5File("new_test_file.h5", "O", "R")
+  !read and attribute in /
+  call f1%getAttribute('thgttg',i)
+  !open on group in /
+  call f1%openGroup('newgroup',g1)
+  !initialize a dataset in /
+  d1=H5Dataset('2d_i32',f1)
+  !read an attribute in d1 dataset
+  call d1%getAttribute('att1',read_a)
+  !initialize a dataset in group "newgroup"
+  d2=H5Dataset('4d_r64',g1)
+  !read the contents of d2 dataset
+  call d2%getDataset(r8_dset)
+  !close hdf5 file
+  call f1%closeFile()
+  
+  ```
