@@ -87,8 +87,11 @@ implicit none
       procedure, public :: setCompressionLevel
       procedure, public :: setFillValue
       procedure, public :: setExtendable
+      procedure, public :: getRank
       procedure, public :: getDims
 
+      procedure, public :: setEmpty
+      
       procedure, private :: set_Int8_1d
       procedure, private :: set_Int16_1d
       procedure, private :: set_Int32_1d
@@ -809,6 +812,14 @@ subroutine setExtendable(self)
 
   self%extendable=.true.
 end subroutine setExtendable
+
+subroutine getRank(self, d_rank)
+  class(H5Dataset) :: self
+  integer, intent(out) :: d_rank
+  integer(kind=I32) :: error
+
+  error = hdf_get_rank(self%parent_id,self%d_name,d_rank)
+end subroutine getRank
 
 subroutine getDims(self, dims)
   class(H5Dataset) :: self
