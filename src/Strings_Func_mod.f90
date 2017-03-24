@@ -119,7 +119,7 @@ module Strings_Func_mod
       end if
       position_under(name_spaces) = scan(trim(filenamein(sum(position_under(1:name_spaces-1))+1:name_len)), '.')
       if (position_under(name_spaces) == 0) then
-          position_under(name_spaces) = len_trim(filenamein)
+          position_under(name_spaces) = len_trim(filenamein) - position_under(name_spaces-1)
       end if
 
       field_names(1)=filenamein(reset+1:position_under(1)-1)
