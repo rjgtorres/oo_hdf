@@ -41,6 +41,8 @@ implicit none
     integer(I32) :: id
     contains
 
+      procedure, public  :: Attr_exists
+
       procedure, private :: set_Int16_Attr0
       procedure, private :: set_Int16_Attr1
       procedure, private :: set_Int32_Attr0
@@ -61,27 +63,27 @@ implicit none
       procedure, private :: get_Real64_Attr0
       procedure, private :: get_Real64_Attr1
 
-      generic, public :: setAttribute => &
-                       set_Int16_Attr0,  &
-                       set_Int16_Attr1,  &
-                       set_Int32_Attr0,  &
-                       set_Int32_Attr1,  &
-                       set_Real32_Attr0, &
-                       set_Real32_Attr1, &
-                       set_Real64_Attr0, &
-                       set_Real64_Attr1, &
-                       set_Char_Attr0,   &
-                       set_Char_Attr1
+      generic, public    :: setAttribute => &
+                          set_Int16_Attr0,  &
+                          set_Int16_Attr1,  &
+                          set_Int32_Attr0,  &
+                          set_Int32_Attr1,  &
+                          set_Real32_Attr0, &
+                          set_Real32_Attr1, &
+                          set_Real64_Attr0, &
+                          set_Real64_Attr1, &
+                          set_Char_Attr0,   &
+                          set_Char_Attr1
 
-      generic, public :: getAttribute => &
-                       get_Char_Attr0,   &
-                       get_Char_Attr1,   &
-                       get_Int_Attr0,    &
-                       get_Int_Attr1,    &
-                       get_Real32_Attr0, &
-                       get_Real32_Attr1, &
-                       get_Real64_Attr0, &
-                       get_Real64_Attr1
+      generic, public    :: getAttribute => &
+                          get_Char_Attr0,   &
+                          get_Char_Attr1,   &
+                          get_Int_Attr0,    &
+                          get_Int_Attr1,    &
+                          get_Real32_Attr0, &
+                          get_Real32_Attr1, &
+                          get_Real64_Attr0, &
+                          get_Real64_Attr1
 
   end type H5Attributable
 
@@ -249,6 +251,23 @@ implicit none
 !#################################################################################################!
 !###################################### Attribute Methods ########################################!
 !#################################################################################################!
+function Attr_exists(self, a_name)
+  class(H5Attributable), intent(in) :: self
+  character(len=*), intent (in):: a_name
+  logical :: Attr_exists
+  integer(kind=I32) :: error
+  integer(kind=I32) :: dset_id
+
+  select type (self)
+    class is (H5Dataset)
+      dset_id = open_dset(self%parent_id,self%d_name)
+      Attr_exists = Ch_Attr_exist(dset_id,a_name)
+      error = close_dset(dset_id)
+    class default
+      Attr_exists = Ch_Attr_exist(self%id,a_name)
+  end select
+end function Attr_exists
+
 subroutine set_Int16_Attr0(self, a_name, val)
   class(H5Attributable), intent(in) :: self
   integer(kind=I16), intent (in):: val
