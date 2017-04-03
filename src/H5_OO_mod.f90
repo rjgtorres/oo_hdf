@@ -125,7 +125,7 @@ implicit none
       procedure, public :: getDims
 
       procedure, public :: setEmpty
-      
+
       procedure, private :: set_Int8_1d
       procedure, private :: set_Int16_1d
       procedure, private :: set_Int32_1d
@@ -180,6 +180,8 @@ implicit none
       procedure, private :: get_Real_Slab3d
       procedure, private :: get_Real_Slab4d
       procedure, private :: get_Real_Slab5d
+
+      procedure, private :: Extend_Int16_3d
 
       generic, public :: setDataset => &
                         set_Int8_1d,   &
@@ -238,6 +240,9 @@ implicit none
                     get_Real_Slab3d, &
                     get_Real_Slab4d, &
                     get_Real_Slab5d
+
+      generic, public :: extendDataset => &
+                        Extend_Int16_3d
 
   end type H5Dataset
 
@@ -1120,5 +1125,16 @@ subroutine set_Real64_6d(self, val)
                                         self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_6d
 
+subroutine Extend_Int16_3d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I16), intent(in) :: val(:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int16_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int16_3d
 
 end module H5_OO_mod

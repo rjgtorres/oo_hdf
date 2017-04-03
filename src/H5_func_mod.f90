@@ -1357,14 +1357,14 @@ module H5_Func_mod
     end function Read_Real_6d_dataset
 
 !#################################################################################################!
-    function Extend_Int16_3d_Dataset(loc_id, d_name, new_size, offset, count, val) result(stat)
+    function Extend_Int16_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
       integer(kind=I16), intent(in) :: val(:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
       integer(kind=I32), parameter  :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
-      integer(kind=I64), intent(in) :: count(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
       integer(kind=I64) :: data_dims(D_RANK)
       integer(kind=I32) :: dataspace
       integer(kind=I32) :: memspace 
@@ -1372,13 +1372,13 @@ module H5_Func_mod
       integer(kind=I32) :: error
       integer(kind=I32) :: stat
 
-      data_dims = count
+      data_dims = dshape
 
       call h5dopen_f(loc_id, d_name, dset_id, error)
       call h5dset_extent_f(dset_id, new_size, error)
       call h5screate_simple_f (D_RANK, data_dims, memspace, error)
       call h5dget_space_f(dset_id, dataspace, error)
-      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, count, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
       
       call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
 
