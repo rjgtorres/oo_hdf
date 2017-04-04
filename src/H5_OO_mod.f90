@@ -113,7 +113,7 @@ implicit none
     integer(kind=I32), private :: compression_level
     integer(kind=I32), private :: chunk_size
     integer(kind=I32), private :: fill_value
-    logical, private :: extendable
+    integer(kind=I32), private :: extendable
     contains
       procedure, public :: showstatus
 
@@ -638,7 +638,7 @@ function newH5Dataset(dset_name, parent_Group)
   newH5Dataset%parent_id         = parent_Group%id
   newH5Dataset%compression_level = 9
   newH5Dataset%chunk_size        = 100
-  newH5Dataset%extendable        = .false.
+  newH5Dataset%extendable        = 0
   newH5Dataset%fill_value        = 0
 end function newH5Dataset
 
@@ -863,10 +863,11 @@ subroutine setFillValue(self, fillvalue)
   self%fill_value=fillvalue
 end subroutine setFillValue
 
-subroutine setExtendable(self)
+subroutine setExtendable(self,extdims)
   class(H5Dataset) :: self
+  integer(kind=I32) :: extdims
 
-  self%extendable=.true.
+  self%extendable=extdims
 end subroutine setExtendable
 
 subroutine getRank(self, d_rank)
