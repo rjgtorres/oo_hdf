@@ -126,6 +126,9 @@ implicit none
 
       procedure, public :: setEmpty
 
+      procedure, public :: defScale
+      procedure, public :: setScale
+
       procedure, private :: set_Int8_1d
       procedure, private :: set_Int16_1d
       procedure, private :: set_Int32_1d
@@ -1137,5 +1140,36 @@ subroutine Extend_Int16_3d(self, new_size, offset, dshape, val)
 
   error = Extend_Int16_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
 end subroutine Extend_Int16_3d
+
+subroutine defScale(self,dim_name)
+  class(H5Dataset) :: self
+  character(len=*), intent(in), optional :: dim_name
+  integer(kind=I32) :: ierr
+  integer(kind=I32) :: dim_id, dset_id
+  
+  dim_id = open_dset(self%parent_id,self%d_name)
+  if (present(dim_name)) then
+    ierr = def_scale(dim_id,dim_name)
+  else
+    ierr = def_scale(dim_id)
+  end if
+end subroutine defScale
+
+
+subroutine setScale(self,dim_dset,idx_dim)
+  class(H5Dataset) :: self
+  class(H5Dataset), intent(in) :: dim_dset
+  integer(kind=I32), intent(in) :: idx_dim
+  integer(kind=I32) :: ierr
+  integer(kind=I32) :: dim_id, dset_id
+  
+  dset_id = open_dset(self%parent_id,self%d_name)
+  dim_id = open_dset(dim_dset%parent_id,dim_dset%d_name)
+  
+  ierr = set_scale(dset_id,dim_id,idx_dim)
+  ierr = close_dset(dim_id)
+  ierr = close_dset(dset_id)
+end subroutine setScale
+
 
 end module H5_OO_mod
