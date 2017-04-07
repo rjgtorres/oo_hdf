@@ -12,6 +12,29 @@ The classes module has the same base structure of [mo_netcdf](https://github.com
 
 There are two main classes, *H5Group* and *H5Dataset*. The *H5File* is extended from the *H5Group*. All classes can read and write attributes from the *H5Attributable* class.
 
+### Tested
+
+This library was tested with versions:
+ - **HDF5**: 1.8.11, 1.8.16
+ - **gfortran**: 4.8.\*, 5.4.\* 
+
+The following methods have been tested in several ways, most of them in production code:
+ - All H5File
+ - All H5Group
+ - All H5Attributable
+ - All H5Dataset, but:
+     - getDataset only integer 8, 16, 32 and real 32 up to 3 dimensions (:,:,:)
+     - setDataset with more than 4 dimensions is not tested
+     - getBlock with more than 2 dimensions is not tested
+     - extendDataset was only tested with int16 array of 3 and 4 dimensions
+
+### TODO
+
+ - [ ] One example of the definition of a netCDF file with this library.
+ - [x] A way to write blocks of arrays.
+ - [x] A way to define more than one dimension to be extensible.
+ - [ ] Implement more functions of the HDF5 library.
+
 ### Interface
  #### H5File
   ```fortran 
@@ -59,10 +82,14 @@ Define the fill value of the dataset:
   ! fillvalue is an integer, if not defined is by default 0
   ```
 
-Define the dataset is extendable in one of its dimentions:
+Define the dataset is extendable in n  dimentions:
   ```fortran 
-  call newdataset%setExtendable()
-```
+  call newdataset%setExtendable(n)
+  ! n is an integer less or equal to the dataset dimensions
+  ! the dataset gets extended from the last rank to the start
+  ! if newdataset has 4 dimensions (:,:,:,:) and we call newdataset%setExtendable(2),
+  ! the last two dimensions become extendable
+  ```
 Define an empty dataset:
   ```fortran 
   call newdataset%setEmpty()
@@ -78,6 +105,22 @@ Get the dataset dimensions:
   call newdataset%getDims(dims)
   !Dims must be an integer array with the dataset rank
   ```
+
+Define dimension (scale) of an array
+  ```fortran 
+  type(H5Dataset) :: dim_dset
+  call dim_dset%setDataset(x)
+  call dim_dset%defScale(dimension_name)
+  !dimension_name the name you wish to attribute to the scale, it is optional
+  ```
+
+Link a dimension (scale) to an array
+  ```fortran 
+  call newdataset%setScale(dim_dset,idx_dim)
+  !dim_dset is the scale object you wish to link with your dataset
+  !idx_dim is an integer with the rank of the dataset where you will link the scale
+  ```
+
 Read the entire dataset:
   ```fortran 
   call newdataset%getDataset(dset_array)
@@ -85,6 +128,7 @@ Read the entire dataset:
   !dset_array can be an integer of 32 bits or a real of 64 bits
   !the dataset inside the file can be of any kind lower or equal of those.
   ```
+
 Read a block of a dataset:
   ```fortran 
   call newdataset%getBlock(offset, shape, d_array)
@@ -96,18 +140,46 @@ Read a block of a dataset:
   !
   !dset_array can be an array of 1 to 5 dimensions
   !dset_array can be an integer or a real of 32 bits
-  !the dataset inside the file can be of any kind lower or equal of those.
   ```
+
 Write a Dataset:
   ```fortran 
-  call newdataset%setDataset(d_array)
+  call newdataset%setDataset(dset_array)
   !dset_array can be an array of 1 to 6 dimensions
   !dset_array can be an integer of 8, 16 or 32 bits
   !dset_array can be a real of 32 or 64 bits
   ```
 
+Extend a Dataset:
+  ```fortran 
+  call newdataset%extendDataset(new_size, offset, dshape, val)
+  !dset_array can be an array of 1 to 6 dimensions
+  !dset_array can be an integer of 8, 16 or 32 bits
+  !dset_array can be a real of 32 or 64 bits
+  !
+  !new_size is a one dimension integer of 64 bits array with the size of the rank of the dataset to write,
+!this array must have the new total shape of the array you want to extend
+  !
+  !offset is a one dimension integer of 64 bits array with the size of the rank of the dataset to write,
+!this array must have the starting points of where you will start writing the array
+!
+!dshape is a one dimension integer of 64 bits array with the size of the rank of the dataset to extend,
+!this array must have the size of the portion the array you want to write
+!
+  
+  ```
+
 #### H5Attributable
 This class is only accessed from an object of class H5Group or H5Dataset.
+
+Verify if an attribute exists:
+  ```fortran 
+  if ( newdataset%Attr_exists(a_name) ) then
+        print*,a_name//' exists'
+  end if
+  !Attr_exists is a logical function
+  !a_name is the name of the attribute to check
+  ```
 
 Read an attribute:
   ```fortran 
@@ -188,11 +260,3 @@ Write an attribute:
   call f1%closeFile()
   
   ```
-
-### TODO
-
- - [ ] More tests.
- - [ ] One example of the definition of a netCDF file with this library.
- - [ ] A way to write blocks of arrays.
- - [ ] A way to define more than one dimension to be extensible.
- - [ ] Implement more functions of the HDF5 library.
