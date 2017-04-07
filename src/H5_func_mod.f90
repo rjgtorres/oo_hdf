@@ -1358,6 +1358,336 @@ module H5_Func_mod
     end function Read_Real_6d_dataset
 
 !#################################################################################################!
+    function Extend_Int8_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I8), intent(in) :: val(:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int8_1d_Dataset
+
+!#################################################################################################!
+    function Extend_Int16_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I16), intent(in) :: val(:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int16_1d_Dataset
+
+!#################################################################################################!
+    function Extend_Int32_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I32), intent(in) :: val(:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int32_1d_Dataset
+
+!#################################################################################################!
+    function Extend_Real32_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=SP), intent(in) :: val(:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real32_1d_Dataset
+
+!#################################################################################################!
+    function Extend_Real64_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=DP), intent(in) :: val(:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real64_1d_Dataset
+
+!#################################################################################################!
+    function Extend_Int8_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I8), intent(in) :: val(:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int8_2d_Dataset
+
+!#################################################################################################!
+    function Extend_Int16_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I16), intent(in) :: val(:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int16_2d_Dataset
+
+!#################################################################################################!
+    function Extend_Int32_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I32), intent(in) :: val(:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int32_2d_Dataset
+
+!#################################################################################################!
+    function Extend_Real32_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=SP), intent(in) :: val(:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real32_2d_Dataset
+
+!#################################################################################################!
+    function Extend_Real64_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=DP), intent(in) :: val(:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real64_2d_Dataset
+
+!#################################################################################################!
+    function Extend_Int8_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I8), intent(in) :: val(:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int8_3d_Dataset
+
+!#################################################################################################!
     function Extend_Int16_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
       integer(kind=I16), intent(in) :: val(:,:,:)
       character (len=*), intent(in) :: d_name
@@ -1388,6 +1718,126 @@ module H5_Func_mod
     end function Extend_Int16_3d_Dataset
 
 !#################################################################################################!
+    function Extend_Int32_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I32), intent(in) :: val(:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int32_3d_Dataset
+
+!#################################################################################################!
+    function Extend_Real32_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=SP), intent(in) :: val(:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real32_3d_Dataset
+
+!#################################################################################################!
+    function Extend_Real64_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=DP), intent(in) :: val(:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real64_3d_Dataset
+
+!#################################################################################################!
+    function Extend_Int8_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I8), intent(in) :: val(:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int8_4d_Dataset
+
+!#################################################################################################!
     function Extend_Int16_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
       integer(kind=I16), intent(in) :: val(:,:,:,:)
       character (len=*), intent(in) :: d_name
@@ -1416,6 +1866,396 @@ module H5_Func_mod
       call h5sclose_f(dataspace, error)
       call h5dclose_f(dset_id, error)
     end function Extend_Int16_4d_Dataset
+
+!#################################################################################################!
+    function Extend_Int32_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I32), intent(in) :: val(:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int32_4d_Dataset
+
+!#################################################################################################!
+    function Extend_Real32_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=SP), intent(in) :: val(:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real32_4d_Dataset
+
+!#################################################################################################!
+    function Extend_Real64_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=DP), intent(in) :: val(:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real64_4d_Dataset
+
+!#################################################################################################!
+    function Extend_Int8_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I8), intent(in) :: val(:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int8_5d_Dataset
+
+!#################################################################################################!
+    function Extend_Int16_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I16), intent(in) :: val(:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int16_5d_Dataset
+
+!#################################################################################################!
+    function Extend_Int32_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I32), intent(in) :: val(:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int32_5d_Dataset
+
+!#################################################################################################!
+    function Extend_Real32_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=SP), intent(in) :: val(:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real32_5d_Dataset
+
+!#################################################################################################!
+    function Extend_Real64_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=DP), intent(in) :: val(:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Real64_5d_Dataset
+
+!#################################################################################################!
+    function Extend_Int8_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I8), intent(in) :: val(:,:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h6dopen_f(loc_id, d_name, dset_id, error)
+      call h6dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h6dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H6dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h6dclose_f(dset_id, error)
+    end function Extend_Int8_6d_Dataset
+
+!#################################################################################################!
+    function Extend_Int16_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I16), intent(in) :: val(:,:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h6dopen_f(loc_id, d_name, dset_id, error)
+      call h6dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h6dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H6dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h6dclose_f(dset_id, error)
+    end function Extend_Int16_6d_Dataset
+
+!#################################################################################################!
+    function Extend_Int32_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I32), intent(in) :: val(:,:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h6dopen_f(loc_id, d_name, dset_id, error)
+      call h6dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h6dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H6dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h6dclose_f(dset_id, error)
+    end function Extend_Int32_6d_Dataset
+
+!#################################################################################################!
+    function Extend_Real32_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=SP), intent(in) :: val(:,:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h6dopen_f(loc_id, d_name, dset_id, error)
+      call h6dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h6dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H6dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h6dclose_f(dset_id, error)
+    end function Extend_Real32_6d_Dataset
+
+!#################################################################################################!
+    function Extend_Real64_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      real(kind=DP), intent(in) :: val(:,:,:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h6dopen_f(loc_id, d_name, dset_id, error)
+      call h6dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h6dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H6dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h6dclose_f(dset_id, error)
+    end function Extend_Real64_6d_Dataset
 
 !#################################################################################################!
     function Create_Int8_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)

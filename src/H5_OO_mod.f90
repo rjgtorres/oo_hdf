@@ -184,8 +184,36 @@ implicit none
       procedure, private :: get_Real_Slab4d
       procedure, private :: get_Real_Slab5d
 
+      procedure, private :: Extend_Int8_1d
+      procedure, private :: Extend_Int16_1d
+      procedure, private :: Extend_Int32_1d
+      procedure, private :: Extend_Real32_1d
+      procedure, private :: Extend_Real64_1d
+      procedure, private :: Extend_Int8_2d
+      procedure, private :: Extend_Int16_2d
+      procedure, private :: Extend_Int32_2d
+      procedure, private :: Extend_Real32_2d
+      procedure, private :: Extend_Real64_2d
+      procedure, private :: Extend_Int8_3d
       procedure, private :: Extend_Int16_3d
+      procedure, private :: Extend_Int32_3d
+      procedure, private :: Extend_Real32_3d
+      procedure, private :: Extend_Real64_3d
+      procedure, private :: Extend_Int8_4d
       procedure, private :: Extend_Int16_4d
+      procedure, private :: Extend_Int32_4d
+      procedure, private :: Extend_Real32_4d
+      procedure, private :: Extend_Real64_4d
+      procedure, private :: Extend_Int8_5d
+      procedure, private :: Extend_Int16_5d
+      procedure, private :: Extend_Int32_5d
+      procedure, private :: Extend_Real32_5d
+      procedure, private :: Extend_Real64_5d
+      procedure, private :: Extend_Int8_6d
+      procedure, private :: Extend_Int16_6d
+      procedure, private :: Extend_Int32_6d
+      procedure, private :: Extend_Real32_6d
+      procedure, private :: Extend_Real64_6d
 
       generic, public :: setDataset => &
                         set_Int8_1d,   &
@@ -246,8 +274,39 @@ implicit none
                     get_Real_Slab5d
 
       generic, public :: extendDataset => &
+                        Extend_Int8_1d,   &
+                        Extend_Int16_1d,  &
+                        Extend_Int32_1d,  &
+                        Extend_Real32_1d, &
+                        Extend_Real64_1d, &
+                        Extend_Int8_2d,   &
+                        Extend_Int16_2d,  &
+                        Extend_Int32_2d,  &
+                        Extend_Real32_2d, &
+                        Extend_Real64_2d, &
+                        Extend_Int8_3d,   &
                         Extend_Int16_3d,  &
-                        Extend_Int16_4d
+                        Extend_Int32_3d,  &
+                        Extend_Real32_3d, &
+                        Extend_Real64_3d, &
+                        Extend_Int8_4d,   &
+                        Extend_Int16_4d,  &
+                        Extend_Int32_4d,  &
+                        Extend_Real32_4d, &
+                        Extend_Real64_4d, &
+                        Extend_Int8_5d,   &
+                        Extend_Int16_5d,  &
+                        Extend_Int32_5d,  &
+                        Extend_Real32_5d, &
+                        Extend_Real64_5d, &
+                        Extend_Int8_6d,   &
+                        Extend_Int16_6d,  &
+                        Extend_Int32_6d,  &
+                        Extend_Real32_6d, &
+                        Extend_Real64_6d
+
+
+
 
   end type H5Dataset
 
@@ -1131,6 +1190,138 @@ subroutine set_Real64_6d(self, val)
                                         self%chunk_size, self%compression_level, self%extendable)
 end subroutine set_Real64_6d
 
+subroutine Extend_Int8_1d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I8), intent(in) :: val(:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int8_1d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int8_1d
+
+subroutine Extend_Int16_1d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I16), intent(in) :: val(:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int16_1d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int16_1d
+
+subroutine Extend_Int32_1d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I32), intent(in) :: val(:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int32_1d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int32_1d
+
+subroutine Extend_Real32_1d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=SP), intent(in) :: val(:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real32_1d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real32_1d
+
+subroutine Extend_Real64_1d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=DP), intent(in) :: val(:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real64_1d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real64_1d
+
+subroutine Extend_Int8_2d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I8), intent(in) :: val(:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int8_2d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int8_2d
+
+subroutine Extend_Int16_2d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I16), intent(in) :: val(:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int16_2d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int16_2d
+
+subroutine Extend_Int32_2d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I32), intent(in) :: val(:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int32_2d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int32_2d
+
+subroutine Extend_Real32_2d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=SP), intent(in) :: val(:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real32_2d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real32_2d
+
+subroutine Extend_Real64_2d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=DP), intent(in) :: val(:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real64_2d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real64_2d
+
+subroutine Extend_Int8_3d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I8), intent(in) :: val(:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int8_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int8_3d
+
 subroutine Extend_Int16_3d(self, new_size, offset, dshape, val)
   class(H5Dataset) :: self
   integer(kind=I16), intent(in) :: val(:,:,:)
@@ -1143,6 +1334,54 @@ subroutine Extend_Int16_3d(self, new_size, offset, dshape, val)
   error = Extend_Int16_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
 end subroutine Extend_Int16_3d
 
+subroutine Extend_Int32_3d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I32), intent(in) :: val(:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int32_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int32_3d
+
+subroutine Extend_Real32_3d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=SP), intent(in) :: val(:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real32_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real32_3d
+
+subroutine Extend_Real64_3d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=DP), intent(in) :: val(:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real64_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real64_3d
+
+subroutine Extend_Int8_4d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I8), intent(in) :: val(:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int8_4d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int8_4d
+
 subroutine Extend_Int16_4d(self, new_size, offset, dshape, val)
   class(H5Dataset) :: self
   integer(kind=I16), intent(in) :: val(:,:,:,:)
@@ -1154,6 +1393,162 @@ subroutine Extend_Int16_4d(self, new_size, offset, dshape, val)
 
   error = Extend_Int16_4d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
 end subroutine Extend_Int16_4d
+
+subroutine Extend_Int32_4d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I32), intent(in) :: val(:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int32_4d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int32_4d
+
+subroutine Extend_Real32_4d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=SP), intent(in) :: val(:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real32_4d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real32_4d
+
+subroutine Extend_Real64_4d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=DP), intent(in) :: val(:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real64_4d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real64_4d
+
+subroutine Extend_Int8_5d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I8), intent(in) :: val(:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int8_5d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int8_5d
+
+subroutine Extend_Int16_5d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I16), intent(in) :: val(:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int16_5d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int16_5d
+
+subroutine Extend_Int32_5d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I32), intent(in) :: val(:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int32_5d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int32_5d
+
+subroutine Extend_Real32_5d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=SP), intent(in) :: val(:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real32_5d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real32_5d
+
+subroutine Extend_Real64_5d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=DP), intent(in) :: val(:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real64_5d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real64_5d
+
+subroutine Extend_Int8_6d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I8), intent(in) :: val(:,:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int8_6d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int8_6d
+
+subroutine Extend_Int16_6d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I16), intent(in) :: val(:,:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int16_6d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int16_6d
+
+subroutine Extend_Int32_6d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I32), intent(in) :: val(:,:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int32_6d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int32_6d
+
+subroutine Extend_Real32_6d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=SP), intent(in) :: val(:,:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real32_6d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real32_6d
+
+subroutine Extend_Real64_6d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  real(kind=DP), intent(in) :: val(:,:,:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Real64_6d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Real64_6d
 
 subroutine defScale(self,dim_name)
   class(H5Dataset) :: self
