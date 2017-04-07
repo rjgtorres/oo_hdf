@@ -185,6 +185,7 @@ implicit none
       procedure, private :: get_Real_Slab5d
 
       procedure, private :: Extend_Int16_3d
+      procedure, private :: Extend_Int16_4d
 
       generic, public :: setDataset => &
                         set_Int8_1d,   &
@@ -245,7 +246,8 @@ implicit none
                     get_Real_Slab5d
 
       generic, public :: extendDataset => &
-                        Extend_Int16_3d
+                        Extend_Int16_3d,  &
+                        Extend_Int16_4d
 
   end type H5Dataset
 
@@ -1141,6 +1143,18 @@ subroutine Extend_Int16_3d(self, new_size, offset, dshape, val)
   error = Extend_Int16_3d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
 end subroutine Extend_Int16_3d
 
+subroutine Extend_Int16_4d(self, new_size, offset, dshape, val)
+  class(H5Dataset) :: self
+  integer(kind=I16), intent(in) :: val(:,:,:,:)
+  integer(kind=I32), parameter  :: D_RANK=rank(val)
+  integer(kind=I64), intent(in) :: new_size(D_RANK)
+  integer(kind=I64), intent(in) :: offset(D_RANK)
+  integer(kind=I64), intent(in) :: dshape(D_RANK)
+  integer(kind=I32) :: error
+
+  error = Extend_Int16_4d_Dataset(self%parent_id, self%d_name, new_size, offset, dshape, val)
+end subroutine Extend_Int16_4d
+
 subroutine defScale(self,dim_name)
   class(H5Dataset) :: self
   character(len=*), intent(in), optional :: dim_name
@@ -1155,7 +1169,6 @@ subroutine defScale(self,dim_name)
   end if
 end subroutine defScale
 
-
 subroutine setScale(self,dim_dset,idx_dim)
   class(H5Dataset) :: self
   class(H5Dataset), intent(in) :: dim_dset
@@ -1165,11 +1178,9 @@ subroutine setScale(self,dim_dset,idx_dim)
   
   dset_id = open_dset(self%parent_id,self%d_name)
   dim_id = open_dset(dim_dset%parent_id,dim_dset%d_name)
-  
   ierr = set_scale(dset_id,dim_id,idx_dim)
   ierr = close_dset(dim_id)
   ierr = close_dset(dset_id)
 end subroutine setScale
-
 
 end module H5_OO_mod

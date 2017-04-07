@@ -313,7 +313,7 @@ module H5_Func_mod
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int16_Attr0
@@ -339,7 +339,7 @@ module H5_Func_mod
           call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, int(val,kind=I32), adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int16_Attr1
@@ -360,7 +360,7 @@ module H5_Func_mod
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int32_Attr0
@@ -386,7 +386,7 @@ module H5_Func_mod
           call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_INTEGER_4, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Int32_Attr1
@@ -408,7 +408,7 @@ module H5_Func_mod
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         HDFSIZE=len(val)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, type_id, trim(val), adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Char_Attr0
@@ -435,7 +435,7 @@ module H5_Func_mod
         end if
         HDFSIZE=len(val)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, type_id, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Char_Attr1
@@ -464,7 +464,7 @@ module H5_Func_mod
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_REAL_4, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real32_Attr0
@@ -498,7 +498,7 @@ module H5_Func_mod
           call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, H5T_NATIVE_REAL_4, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real32_Attr1
@@ -527,7 +527,7 @@ module H5_Func_mod
         adims = [0]
         call H5screate_f(H5S_SCALAR_F, space_id, hdferr)
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, type_id, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real64_Attr0
@@ -561,7 +561,7 @@ module H5_Func_mod
           call H5screate_simple_f(A_RANK, adims, space_id, hdferr)
         end if
         call H5tset_size_f(type_id, HDFSIZE, hdferr)
-        call H5acreate_f(obj_id, a_name, type_id, space_id, attr_id, hdferr)
+        call H5acreate_f(obj_id, trim(a_name), type_id, space_id, attr_id, hdferr)
         call H5awrite_f(attr_id, type_id, val, adims, stat)
         call H5aclose_f(attr_id,hdferr)
     end function Create_Real64_Attr1
@@ -1368,7 +1368,7 @@ module H5_Func_mod
       integer(kind=I64), intent(in) :: dshape(D_RANK)
       integer(kind=I64) :: data_dims(D_RANK)
       integer(kind=I32) :: dataspace
-      integer(kind=I32) :: memspace 
+      integer(kind=I32) :: memspace
       integer(kind=I32) :: dset_id
       integer(kind=I32) :: error
       integer(kind=I32) :: stat
@@ -1380,12 +1380,43 @@ module H5_Func_mod
       call h5screate_simple_f (D_RANK, data_dims, memspace, error)
       call h5dget_space_f(dset_id, dataspace, error)
       call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
-      
+
       call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
 
       call h5sclose_f(dataspace, error)
       call h5dclose_f(dset_id, error)
     end function Extend_Int16_3d_Dataset
+
+!#################################################################################################!
+    function Extend_Int16_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
+      integer(kind=I16), intent(in) :: val(:,:,:,:)
+      character (len=*), intent(in) :: d_name
+      integer(kind=I32), intent(in) :: loc_id
+      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I64), intent(in) :: new_size(D_RANK)
+      integer(kind=I64), intent(in) :: offset(D_RANK)
+      integer(kind=I64), intent(in) :: dshape(D_RANK)
+      integer(kind=I64) :: data_dims(D_RANK)
+      integer(kind=I32) :: dataspace
+      integer(kind=I32) :: memspace
+      integer(kind=I32) :: dset_id
+      integer(kind=I32) :: error
+      integer(kind=I32) :: stat
+
+      data_dims = dshape
+
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
+      call h5screate_simple_f (D_RANK, data_dims, memspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
+      call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
+
+      call H5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+
+      call h5sclose_f(dataspace, error)
+      call h5dclose_f(dset_id, error)
+    end function Extend_Int16_4d_Dataset
+
 !#################################################################################################!
     function Create_Int8_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
       integer(kind=I8), intent (in):: val(:)
