@@ -2125,16 +2125,16 @@ module H5_Func_mod
 
       data_dims = dshape
 
-      call h6dopen_f(loc_id, d_name, dset_id, error)
-      call h6dset_extent_f(dset_id, new_size, error)
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
       call h5screate_simple_f (D_RANK, data_dims, memspace, error)
-      call h6dget_space_f(dset_id, dataspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
       call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
 
-      call H6dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+      call h5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
 
       call h5sclose_f(dataspace, error)
-      call h6dclose_f(dset_id, error)
+      call h5dclose_f(dset_id, error)
     end function Extend_Int8_6d_Dataset
 
 !#################################################################################################!
@@ -2155,16 +2155,16 @@ module H5_Func_mod
 
       data_dims = dshape
 
-      call h6dopen_f(loc_id, d_name, dset_id, error)
-      call h6dset_extent_f(dset_id, new_size, error)
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
       call h5screate_simple_f (D_RANK, data_dims, memspace, error)
-      call h6dget_space_f(dset_id, dataspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
       call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
 
-      call H6dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
+      call h5dwrite_f(dset_id, H5T_NATIVE_INTEGER, int(val,4), data_dims, stat, memspace, dataspace)
 
       call h5sclose_f(dataspace, error)
-      call h6dclose_f(dset_id, error)
+      call h5dclose_f(dset_id, error)
     end function Extend_Int16_6d_Dataset
 
 !#################################################################################################!
@@ -2185,16 +2185,16 @@ module H5_Func_mod
 
       data_dims = dshape
 
-      call h6dopen_f(loc_id, d_name, dset_id, error)
-      call h6dset_extent_f(dset_id, new_size, error)
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
       call h5screate_simple_f (D_RANK, data_dims, memspace, error)
-      call h6dget_space_f(dset_id, dataspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
       call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
 
-      call H6dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
+      call h5dwrite_f(dset_id, H5T_NATIVE_INTEGER, val, data_dims, stat, memspace, dataspace)
 
       call h5sclose_f(dataspace, error)
-      call h6dclose_f(dset_id, error)
+      call h5dclose_f(dset_id, error)
     end function Extend_Int32_6d_Dataset
 
 !#################################################################################################!
@@ -2215,16 +2215,16 @@ module H5_Func_mod
 
       data_dims = dshape
 
-      call h6dopen_f(loc_id, d_name, dset_id, error)
-      call h6dset_extent_f(dset_id, new_size, error)
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
       call h5screate_simple_f (D_RANK, data_dims, memspace, error)
-      call h6dget_space_f(dset_id, dataspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
       call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
 
-      call H6dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
+      call h5dwrite_f(dset_id, H5T_NATIVE_REAL_4, val, data_dims, stat, memspace, dataspace)
 
       call h5sclose_f(dataspace, error)
-      call h6dclose_f(dset_id, error)
+      call h5dclose_f(dset_id, error)
     end function Extend_Real32_6d_Dataset
 
 !#################################################################################################!
@@ -2245,16 +2245,16 @@ module H5_Func_mod
 
       data_dims = dshape
 
-      call h6dopen_f(loc_id, d_name, dset_id, error)
-      call h6dset_extent_f(dset_id, new_size, error)
+      call h5dopen_f(loc_id, d_name, dset_id, error)
+      call h5dset_extent_f(dset_id, new_size, error)
       call h5screate_simple_f (D_RANK, data_dims, memspace, error)
-      call h6dget_space_f(dset_id, dataspace, error)
+      call h5dget_space_f(dset_id, dataspace, error)
       call h5sselect_hyperslab_f(dataspace, H5S_SELECT_SET_F, offset, dshape, error)
 
-      call H6dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
+      call h5dwrite_f(dset_id, H5T_NATIVE_REAL_8, val, data_dims, stat, memspace, dataspace)
 
       call h5sclose_f(dataspace, error)
-      call h6dclose_f(dset_id, error)
+      call h5dclose_f(dset_id, error)
     end function Extend_Real64_6d_Dataset
 
 !#################################################################################################!
