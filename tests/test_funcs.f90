@@ -39,7 +39,7 @@ program test_h5_funcs
   error=Create_Dset(gr_id,"2d_r64",real(test_arr,DP))
 
   error=Create_Dset(gr_id,"1d_i32",test_arr(1,:))
-  error=Create_Dset(gr_id,"1d_i16",int(test_arr(1,:),I16), extendable=.true.)
+  error=Create_Dset(gr_id,"1d_i16",int(test_arr(1,:),I16), extendable=1)
   error=Create_Dset(gr_id,"1d_i8",int(test_arr(1,:),I8))
   error=Create_Dset(gr_id,"1d_r32",real(test_arr(1,:),SP))
   error=Create_Dset(gr_id,"1d_r64",real(test_arr(1,:),DP))

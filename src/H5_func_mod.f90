@@ -256,10 +256,10 @@ module H5_Func_mod
       ! If no input arguments for the dataset name and index are given,
       ! the group identifier is returned.
       ! If no group id is given, the root group ("/") is returned.
-      integer , intent (in):: file_id
-      character (len=*) ,optional, intent (in):: d_name
+      integer, intent(in) :: file_id
+      character (len=*) ,optional, intent(in) :: d_name
       character (len=LEN_STR_ATTR) :: buff_name
-      integer(kind=I32) , optional, intent (in) :: d_idx
+      integer(kind=I32), optional, intent (in) :: d_idx
       integer, optional, intent (out) :: stat
       integer :: hdferr
       integer(kind=I32) :: obj_type
@@ -275,7 +275,7 @@ module H5_Func_mod
 
       if (.not. present(d_name)) then
         if (present(d_idx)) then
-          call H5gget_obj_info_idx_f(file_id, "/" , d_idx, buff_name, obj_type, hdferr)
+          call H5gget_obj_info_idx_f(file_id, "/", d_idx, buff_name, obj_type, hdferr)
           call H5dopen_f(buff_gr_id, trim(buff_name), get_obj_id, hdferr)
         else
           get_obj_id = buff_gr_id
@@ -288,8 +288,8 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Ch_Attr_exist(obj_id, a_name)
-        integer, intent (in):: obj_id
-        character(len=*), intent (in):: a_name
+        integer, intent(in) :: obj_id
+        character(len=*), intent(in) :: a_name
         logical :: Ch_Attr_exist
         integer(HID_T) :: attr_id, space_id
         integer :: hdferr
@@ -299,15 +299,15 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_Attr0(obj_id, a_name, val) result(stat)
-        integer(kind=I16), intent (in):: val
-        integer, intent (in):: obj_id
-        character(len=*), intent (in):: a_name
+        integer(kind=I16), intent(in) :: val
+        integer, intent(in) :: obj_id
+        character(len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 2 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 2 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
         call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
         adims = [0]
@@ -320,15 +320,15 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_Attr1(obj_id, a_name, val) result(stat)
-        integer(kind=I16), intent (in):: val(:)
-        integer, intent(in):: obj_id
-        character(len=*), intent (in):: a_name
+        integer(kind=I16), contiguous, intent(in) :: val(:)
+        integer, intent(in) :: obj_id
+        character(len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 2 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 2 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
         call H5tcopy_f(H5T_NATIVE_INTEGER_2, type_id, hdferr)
@@ -346,15 +346,15 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_Attr0(obj_id, a_name, val) result(stat)
-        integer(kind=I32) , intent (in):: val
-        integer , intent (in):: obj_id
-        character (len=*), intent (in):: a_name
+        integer(kind=I32), intent(in) :: val
+        integer, intent(in) :: obj_id
+        character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 4 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
         call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
         adims = [0]
@@ -367,15 +367,15 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_Attr1(obj_id, a_name, val) result(stat)
-        integer(kind=HID_T) , intent (in):: val(:)
-        integer , intent (in):: obj_id
-        character (len=*), intent (in):: a_name
+        integer(kind=HID_T), contiguous, intent(in) :: val(:)
+        integer, intent(in) :: obj_id
+        character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 4 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
         call H5tcopy_f(H5T_NATIVE_INTEGER_4, type_id, hdferr)
@@ -393,15 +393,15 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Char_Attr0(obj_id, a_name, val) result(stat)
-        character(len=*), intent (in):: val
-        integer , intent (in):: obj_id
-        character (len=*), intent (in):: a_name
+        character(len=*), intent(in) :: val
+        integer, intent(in) :: obj_id
+        character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: HDFSIZE
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
         call H5tcopy_f(H5T_NATIVE_CHARACTER, type_id, hdferr)
         adims = [0]
@@ -421,8 +421,8 @@ module H5_Func_mod
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
         integer(kind=SIZE_T) :: HDFSIZE
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
@@ -450,15 +450,15 @@ module H5_Func_mod
         ! the attribute will be set at the given group in the file.
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
-        real(kind=SP) , intent (in):: val
+        real(kind=SP), intent(in) :: val
         integer, intent (in) :: obj_id
-        character (len=*), intent (in):: a_name
+        character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 4 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
         call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
         adims = [0]
@@ -479,15 +479,15 @@ module H5_Func_mod
         ! the attribute will be set at the given group in the file.
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
-        real(kind=SP) , intent (in):: val(:)
-        integer , intent (in):: obj_id
-        character (len=*), intent (in):: a_name
+        real(kind=SP), contiguous, intent(in) :: val(:)
+        integer, intent(in) :: obj_id
+        character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 4 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 4 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
         call H5tcopy_f(H5T_NATIVE_REAL_4, type_id, hdferr)
@@ -513,15 +513,15 @@ module H5_Func_mod
         ! the attribute will be set at the given group in the file.
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
-        real(kind=DP), intent (in):: val
-        integer , intent (in):: obj_id
-        character (len=*), intent (in):: a_name
+        real(kind=DP), intent(in) :: val
+        integer, intent(in) :: obj_id
+        character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 8 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 8 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
         call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
         adims = [0]
@@ -542,15 +542,15 @@ module H5_Func_mod
         ! the attribute will be set at the given group in the file.
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
-        real(kind=DP), intent (in):: val(:)
-        integer , intent (in):: obj_id
-        character (len=*), intent (in):: a_name
+        real(kind=DP), contiguous, intent(in) :: val(:)
+        integer, intent(in) :: obj_id
+        character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(SIZE_T) , parameter :: HDFSIZE = 8 ! DataType Size in Bytes
-        integer(HSIZE_T):: adims(1) !Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(SIZE_T), parameter :: HDFSIZE = 8 ! DataType Size in Bytes
+        integer(HSIZE_T) :: adims(1) !Attribut Dimension
         integer(kind=I32), parameter :: A_RANK=rank(val)
 
         call H5tcopy_f(H5T_NATIVE_REAL_8, type_id, hdferr)
@@ -571,13 +571,13 @@ module H5_Func_mod
         ! Creates an empty dataset with the only purpose of an attributes
         ! storage. (Here used to hold the spatial reference system
         ! attributes, 'grid_maping'.)
-        integer , intent (in):: obj_id
+        integer, intent(in) :: obj_id
         integer(HID_T) :: dset_id, space_id
-        character (len=*) , intent (in):: d_name
+        character (len=*), intent(in) :: d_name
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
-        integer(HSIZE_T):: adims(1) ! Attribut Dimension
+        integer(HID_T) :: type_id ! DataType identifier
+        integer(HSIZE_T) :: adims(1) ! Attribut Dimension
         adims = [0]
         call H5tcopy_f(H5T_NATIVE_CHARACTER, type_id, hdferr)
         call H5screate_simple_f(1, adims, space_id, hdferr)
@@ -913,7 +913,7 @@ module H5_Func_mod
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -937,12 +937,12 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         character(len=*), intent(out) :: val
-        integer , intent (in) :: obj_id
+        integer, intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -966,12 +966,12 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=SP), intent(out) :: val(:)
-        integer , intent (in) :: obj_id
+        integer, intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -995,12 +995,12 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=SP), intent(out) :: val
-        integer , intent (in) :: obj_id
+        integer, intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -1024,12 +1024,12 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=DP), intent(out) :: val(:)
-        integer , intent (in) :: obj_id
+        integer, intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -1053,12 +1053,12 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         real(kind=DP), intent(out) :: val
-        integer , intent (in) :: obj_id
+        integer, intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -1083,12 +1083,12 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         integer(kind=I32), intent(out) :: val(:)
-        integer , intent (in) :: obj_id
+        integer, intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -1112,12 +1112,12 @@ module H5_Func_mod
         ! If no group id is given, the dataset will be get from
         ! the root group ("/").
         integer(kind=I32), intent(out) :: val
-        integer , intent (in) :: obj_id
+        integer, intent (in) :: obj_id
         character (len=*), intent(in) :: a_name
         integer(HID_T) :: attr_id, space_id
         integer :: stat
         integer :: hdferr
-        integer(HID_T)  :: type_id ! DataType identifier
+        integer(HID_T) :: type_id ! DataType identifier
         integer(SIZE_T) :: hdfsize
         integer(HSIZE_T) :: adims(1) !Attribut Dimension
 
@@ -1359,10 +1359,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int8_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I8), intent(in) :: val(:)
+      integer(kind=I8), contiguous, intent(in) :: val(:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1389,10 +1389,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int16_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I16), intent(in) :: val(:)
+      integer(kind=I16), contiguous, intent(in) :: val(:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1419,10 +1419,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int32_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I32), intent(in) :: val(:)
+      integer(kind=I32), contiguous, intent(in) :: val(:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1449,10 +1449,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real32_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=SP), intent(in) :: val(:)
+      real(kind=SP), contiguous, intent(in) :: val(:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1479,10 +1479,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real64_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=DP), intent(in) :: val(:)
+      real(kind=DP), contiguous, intent(in) :: val(:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1509,10 +1509,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int8_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I8), intent(in) :: val(:,:)
+      integer(kind=I8), contiguous, intent(in) :: val(:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1539,10 +1539,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int16_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I16), intent(in) :: val(:,:)
+      integer(kind=I16), contiguous, intent(in) :: val(:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1569,10 +1569,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int32_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I32), intent(in) :: val(:,:)
+      integer(kind=I32), contiguous, intent(in) :: val(:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1599,10 +1599,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real32_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=SP), intent(in) :: val(:,:)
+      real(kind=SP), contiguous, intent(in) :: val(:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1629,10 +1629,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real64_2d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=DP), intent(in) :: val(:,:)
+      real(kind=DP), contiguous, intent(in) :: val(:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1659,10 +1659,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int8_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I8), intent(in) :: val(:,:,:)
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1689,10 +1689,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int16_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I16), intent(in) :: val(:,:,:)
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1719,10 +1719,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int32_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I32), intent(in) :: val(:,:,:)
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1749,10 +1749,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real32_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=SP), intent(in) :: val(:,:,:)
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1779,10 +1779,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real64_3d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=DP), intent(in) :: val(:,:,:)
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1809,10 +1809,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int8_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I8), intent(in) :: val(:,:,:,:)
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1839,10 +1839,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int16_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I16), intent(in) :: val(:,:,:,:)
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1869,10 +1869,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int32_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I32), intent(in) :: val(:,:,:,:)
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1899,10 +1899,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real32_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=SP), intent(in) :: val(:,:,:,:)
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1929,10 +1929,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real64_4d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=DP), intent(in) :: val(:,:,:,:)
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1959,10 +1959,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int8_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I8), intent(in) :: val(:,:,:,:,:)
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -1989,10 +1989,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int16_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I16), intent(in) :: val(:,:,:,:,:)
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2019,10 +2019,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int32_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I32), intent(in) :: val(:,:,:,:,:)
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2049,10 +2049,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real32_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=SP), intent(in) :: val(:,:,:,:,:)
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2079,10 +2079,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real64_5d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=DP), intent(in) :: val(:,:,:,:,:)
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2109,10 +2109,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int8_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I8), intent(in) :: val(:,:,:,:,:,:)
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2139,10 +2139,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int16_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I16), intent(in) :: val(:,:,:,:,:,:)
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2169,10 +2169,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Int32_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      integer(kind=I32), intent(in) :: val(:,:,:,:,:,:)
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2199,10 +2199,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real32_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=SP), intent(in) :: val(:,:,:,:,:,:)
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2229,10 +2229,10 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Extend_Real64_6d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
-      real(kind=DP), intent(in) :: val(:,:,:,:,:,:)
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:,:,:,:)
       character (len=*), intent(in) :: d_name
       integer(kind=I32), intent(in) :: loc_id
-      integer(kind=I32), parameter  :: D_RANK=rank(val)
+      integer(kind=I32), parameter :: D_RANK=rank(val)
       integer(kind=I64), intent(in) :: new_size(D_RANK)
       integer(kind=I64), intent(in) :: offset(D_RANK)
       integer(kind=I64), intent(in) :: dshape(D_RANK)
@@ -2259,22 +2259,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int8_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I8), intent (in):: val(:)
-      integer , intent (in):: obj_id
+      integer(kind=I8), contiguous, intent(in) :: val(:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2295,22 +2295,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I16), intent (in):: val(:)
-      integer , intent (in):: obj_id
+      integer(kind=I16), contiguous, intent(in) :: val(:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2331,22 +2331,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I32), intent (in):: val(:)
-      integer , intent (in):: obj_id
+      integer(kind=I32), contiguous, intent(in) :: val(:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2367,22 +2367,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real32_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=SP), intent (in):: val(:)
-      integer , intent (in):: obj_id
+      real(kind=SP), contiguous, intent(in) :: val(:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2403,22 +2403,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real64_1d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=DP), intent (in):: val(:)
-      integer , intent (in):: obj_id
+      real(kind=DP), contiguous, intent(in) :: val(:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2439,22 +2439,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int8_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I8), intent (in):: val(:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I8), contiguous, intent(in) :: val(:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2475,22 +2475,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I16), intent (in):: val(:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I16), contiguous, intent(in) :: val(:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2511,22 +2511,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I32), intent (in):: val(:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I32), contiguous, intent(in) :: val(:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2547,22 +2547,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real32_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=SP), intent (in):: val(:,:)
-      integer , intent (in):: obj_id
+      real(kind=SP), contiguous, intent(in) :: val(:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2583,22 +2583,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real64_2d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=DP), intent (in):: val(:,:)
-      integer , intent (in):: obj_id
+      real(kind=DP), contiguous, intent(in) :: val(:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2619,22 +2619,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int8_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I8), intent (in):: val(:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2655,21 +2655,21 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I16), intent (in):: val(:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2690,22 +2690,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I32), intent (in):: val(:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2726,22 +2726,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real32_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=SP), intent (in):: val(:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2762,22 +2762,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real64_3d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=DP), intent (in):: val(:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2798,22 +2798,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int8_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I8), intent (in):: val(:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2834,22 +2834,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I16), intent (in):: val(:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2870,22 +2870,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I32), intent (in):: val(:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2906,22 +2906,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real32_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=SP), intent (in):: val(:,:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2942,22 +2942,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real64_4d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=DP), intent (in):: val(:,:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -2978,22 +2978,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int8_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I8), intent (in):: val(:,:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3014,22 +3014,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I16), intent (in):: val(:,:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3050,22 +3050,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I32), intent (in):: val(:,:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3086,22 +3086,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real32_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=SP), intent (in):: val(:,:,:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3122,22 +3122,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real64_5d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=DP), intent (in):: val(:,:,:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3158,22 +3158,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int8_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I8), intent (in):: val(:,:,:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I8), contiguous, intent(in) :: val(:,:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3194,22 +3194,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int16_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I16), intent (in):: val(:,:,:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I16), contiguous, intent(in) :: val(:,:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3230,22 +3230,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Int32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      integer(kind=I32), intent (in):: val(:,:,:,:,:,:)
-      integer , intent (in):: obj_id
+      integer(kind=I32), contiguous, intent(in) :: val(:,:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3266,22 +3266,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real32_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=SP), intent (in):: val(:,:,:,:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=SP), contiguous, intent(in) :: val(:,:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)
@@ -3302,22 +3302,22 @@ module H5_Func_mod
 
 !#################################################################################################!
     function Create_Real64_6d_Dataset(obj_id, d_name, val, fill_val, in_chunk_size, comp_level, extendable) result(dset_id)
-      real(kind=DP), intent (in):: val(:,:,:,:,:,:)
-      integer , intent (in):: obj_id
+      real(kind=DP), contiguous, intent(in) :: val(:,:,:,:,:,:)
+      integer, intent(in) :: obj_id
       integer(HID_T) :: dset_id, space_id
-      character (len=*) , intent (in):: d_name
+      character (len=*), intent(in) :: d_name
       integer :: stat
       integer :: hdferr
       integer(kind=I32), parameter :: D_RANK=rank(val)
-      integer(HID_T)  :: type_id ! DataType identifier
+      integer(HID_T) :: type_id ! DataType identifier
       integer(kind=I32), optional, intent(in) :: fill_val 
       integer(kind=I32), optional, intent(in) :: extendable
       integer(kind=I32), optional, intent(in) :: comp_level ! Compression level
       integer(kind=I32), optional, intent(in) :: in_chunk_size ! Chunk size
       integer(kind=I64) :: chunk_size
-      integer(HSIZE_T):: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
+      integer(HSIZE_T) :: adims(D_RANK), max_dims(D_RANK) ! Dataset Dimension, MaxDimension ->
                                                ! -> (MaxDimension is here used to enable extend for the time dimension)
-      integer(HID_T)  :: prp_id ! Property identifier
+      integer(HID_T) :: prp_id ! Property identifier
 
       adims = shape(val)
       call create_propriety_list(D_RANK, adims, in_chunk_size, comp_level, extendable, prp_id, max_dims)

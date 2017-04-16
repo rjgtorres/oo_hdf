@@ -36,6 +36,8 @@ DIRLIBRARY_H=/usr
 
 LIBRARY_HF=hdf5_serial_fortran
 LIBRARY_H=hdf5_serial
+LIBRARY_HFL=hdf5_serialhl_fortran
+LIBRARY_HL=hdf5_serial_hl
 
 LIB=lib/x86_64-linux-gnu
 INC=include/hdf5/serial/
@@ -53,22 +55,30 @@ FFLAGS= -fbounds-check -O0 -fconvert=big-endian -finit-local-zero -cpp -DLITTLE_
 
 $(TEST1).exe: $(TEST)$(TEST1).o $(LIST_MOD_O) $(LIST_SUB_O) \
 	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HF).a \
-	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_H).a 
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_H).a \
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HL).a \
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HFL).a 
 	$(FC) $(FFLAGS) $(TEST)$(TEST1).o $(LIST_MOD_O) $(LIST_SUB_O) \
 	-L$(DIRLIBRARY_H)/$(LIB) \
 	-l$(LIBRARY_HF) \
 	-L$(DIRLIBRARY_H)/$(LIB) \
 	-l$(LIBRARY_H) \
+	-l$(LIBRARY_HL) \
+	-l$(LIBRARY_HFL) \
 	-o $@
 
 $(TEST2).exe: $(TEST)$(TEST2).o $(LIST_MOD_O) $(LIST_SUB_O) \
 	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HF).a \
-	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_H).a 
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_H).a \
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HL).a \
+	$(DIRLIBRARY_H)/$(LIB)/lib$(LIBRARY_HFL).a 
 	$(FC) $(FFLAGS) $(TEST)$(TEST2).o $(LIST_MOD_O) $(LIST_SUB_O) \
 	-L$(DIRLIBRARY_H)/$(LIB) \
 	-l$(LIBRARY_HF) \
 	-L$(DIRLIBRARY_H)/$(LIB) \
 	-l$(LIBRARY_H) \
+	-l$(LIBRARY_HL) \
+	-l$(LIBRARY_HFL) \
 	-o $@
 
 #	-l$(LIBRARY_HL) \
