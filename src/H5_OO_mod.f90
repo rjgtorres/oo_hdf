@@ -166,12 +166,18 @@ implicit none
       procedure, private :: get_Int_4d
       procedure, private :: get_Int_5d
       procedure, private :: get_Int_6d
-      procedure, private :: get_Real_1d
-      procedure, private :: get_Real_2d
-      procedure, private :: get_Real_3d
-      procedure, private :: get_Real_4d
-      procedure, private :: get_Real_5d
-      procedure, private :: get_Real_6d
+      procedure, private :: get_Real32_1d
+      procedure, private :: get_Real32_2d
+      procedure, private :: get_Real32_3d
+      procedure, private :: get_Real32_4d
+      procedure, private :: get_Real32_5d
+      procedure, private :: get_Real32_6d
+      procedure, private :: get_Real64_1d
+      procedure, private :: get_Real64_2d
+      procedure, private :: get_Real64_3d
+      procedure, private :: get_Real64_4d
+      procedure, private :: get_Real64_5d
+      procedure, private :: get_Real64_6d
 
       procedure, private :: get_Int_Slab1d
       procedure, private :: get_Int_Slab2d
@@ -254,12 +260,18 @@ implicit none
                           get_Int_4d,  &
                           get_Int_5d,  &
                           get_Int_6d,  &
-                          get_Real_1d, &
-                          get_Real_2d, &
-                          get_Real_3d, &
-                          get_Real_4d, &
-                          get_Real_5d, &
-                          get_Real_6d
+                          get_Real32_1d, &
+                          get_Real32_2d, &
+                          get_Real32_3d, &
+                          get_Real32_4d, &
+                          get_Real32_5d, &
+                          get_Real32_6d, &
+                          get_Real64_1d, &
+                          get_Real64_2d, &
+                          get_Real64_3d, &
+                          get_Real64_4d, &
+                          get_Real64_5d, &
+                          get_Real64_6d
 
       generic, public :: getBlock => &
                     get_Int_Slab1d,  &
@@ -754,47 +766,89 @@ subroutine get_Int_6d(self, val)
   self%id = Read_Int_6d_dataset(self%parent_id, self%d_name, val)
 end subroutine get_Int_6d
 
-subroutine get_Real_1d(self, val)
+subroutine get_Real32_1d(self, val)
+  class(H5Dataset), intent(inout) :: self
+  real(kind=SP), intent(out) :: val(:)
+
+  self%id = Read_Real32_1d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real32_1d
+
+subroutine get_Real32_2d(self, val)
+  class(H5Dataset), intent(inout) :: self
+  real(kind=SP), intent(out) :: val(:,:)
+
+  self%id = Read_Real32_2d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real32_2d
+
+subroutine get_Real32_3d(self, val)
+  class(H5Dataset), intent(inout) :: self
+  real(kind=SP), intent(out) :: val(:,:,:)
+
+  self%id = Read_Real32_3d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real32_3d
+
+subroutine get_Real32_4d(self, val)
+  class(H5Dataset), intent(inout) :: self
+  real(kind=SP), intent(out) :: val(:,:,:,:)
+
+  self%id = Read_Real32_4d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real32_4d
+
+subroutine get_Real32_5d(self, val)
+  class(H5Dataset), intent(inout) :: self
+  real(kind=SP), intent(out) :: val(:,:,:,:,:)
+
+  self%id = Read_Real32_5d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real32_5d
+
+subroutine get_Real32_6d(self, val)
+  class(H5Dataset), intent(inout) :: self
+  real(kind=SP), intent(out) :: val(:,:,:,:,:,:)
+
+  self%id = Read_Real32_6d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real32_6d
+
+subroutine get_Real64_1d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(out) :: val(:)
 
-  self%id = Read_Real_1d_dataset(self%parent_id, self%d_name, val)
-end subroutine get_Real_1d
+  self%id = Read_Real64_1d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real64_1d
 
-subroutine get_Real_2d(self, val)
+subroutine get_Real64_2d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(out) :: val(:,:)
 
-  self%id = Read_Real_2d_dataset(self%parent_id, self%d_name, val)
-end subroutine get_Real_2d
+  self%id = Read_Real64_2d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real64_2d
 
-subroutine get_Real_3d(self, val)
+subroutine get_Real64_3d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(out) :: val(:,:,:)
 
-  self%id = Read_Real_3d_dataset(self%parent_id, self%d_name, val)
-end subroutine get_Real_3d
+  self%id = Read_Real64_3d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real64_3d
 
-subroutine get_Real_4d(self, val)
+subroutine get_Real64_4d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(out) :: val(:,:,:,:)
 
-  self%id = Read_Real_4d_dataset(self%parent_id, self%d_name, val)
-end subroutine get_Real_4d
+  self%id = Read_Real64_4d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real64_4d
 
-subroutine get_Real_5d(self, val)
+subroutine get_Real64_5d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(out) :: val(:,:,:,:,:)
 
-  self%id = Read_Real_5d_dataset(self%parent_id, self%d_name, val)
-end subroutine get_Real_5d
+  self%id = Read_Real64_5d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real64_5d
 
-subroutine get_Real_6d(self, val)
+subroutine get_Real64_6d(self, val)
   class(H5Dataset), intent(inout) :: self
   real(kind=DP), intent(out) :: val(:,:,:,:,:,:)
 
-  self%id = Read_Real_6d_dataset(self%parent_id, self%d_name, val)
-end subroutine get_Real_6d
+  self%id = Read_Real64_6d_dataset(self%parent_id, self%d_name, val)
+end subroutine get_Real64_6d
 
 subroutine get_Int_Slab1d(self, offset, dshape, val)
   class(H5Dataset) :: self

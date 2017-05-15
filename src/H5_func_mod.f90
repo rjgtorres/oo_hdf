@@ -70,13 +70,20 @@ module H5_Func_mod
      module procedure Read_Int_4d_dataset
      module procedure Read_Int_5d_dataset
      module procedure Read_Int_6d_dataset
-     module procedure Read_Real_0d_dataset
-     module procedure Read_Real_1d_dataset
-     module procedure Read_Real_2d_dataset
-     module procedure Read_Real_3d_dataset
-     module procedure Read_Real_4d_dataset
-     module procedure Read_Real_5d_dataset
-     module procedure Read_Real_6d_dataset
+     module procedure Read_Real32_0d_dataset
+     module procedure Read_Real32_1d_dataset
+     module procedure Read_Real32_2d_dataset
+     module procedure Read_Real32_3d_dataset
+     module procedure Read_Real32_4d_dataset
+     module procedure Read_Real32_5d_dataset
+     module procedure Read_Real32_6d_dataset
+     module procedure Read_Real64_0d_dataset
+     module procedure Read_Real64_1d_dataset
+     module procedure Read_Real64_2d_dataset
+     module procedure Read_Real64_3d_dataset
+     module procedure Read_Real64_4d_dataset
+     module procedure Read_Real64_5d_dataset
+     module procedure Read_Real64_6d_dataset
   end interface Read_Dset
 
   interface Create_Dset
@@ -1242,12 +1249,12 @@ module H5_Func_mod
       call h5dread_f(dset_id, H5T_NATIVE_INTEGER, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
     end function Read_Int_6d_dataset
-    
+
 !#################################################################################################!
-    function Read_Real_0d_dataset(loc_id, dset_name, data) result(dset_id)
+    function Read_Real32_0d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
-      real(dp), intent(out) :: data               ! data to be written
+      real(kind=SP), intent(out) :: data               ! data to be written
 
       integer(SIZE_T) :: dims(1)
       integer(HID_T) :: dset_id
@@ -1255,15 +1262,15 @@ module H5_Func_mod
 
       dims = (/ 0 /)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
-      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function Read_Real_0d_dataset
+    end function Read_Real32_0d_dataset
 
 !#################################################################################################!
-    function Read_Real_1d_dataset(loc_id, dset_name, data) result(dset_id)
+    function Read_Real32_1d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
-      real(dp), intent(out) :: data(:)            ! data to be written
+      real(kind=SP), intent(out) :: data(:)            ! data to be written
 
       integer(SIZE_T) :: dims(1)
       integer(HID_T) :: dset_id
@@ -1271,15 +1278,15 @@ module H5_Func_mod
 
       dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
-      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function Read_Real_1d_dataset
+    end function Read_Real32_1d_dataset
 
 !#################################################################################################!
-    function Read_Real_2d_dataset(loc_id, dset_name, data) result(dset_id)
+    function Read_Real32_2d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
-      real(dp), intent(out) :: data(:,:)          ! data to be written
+      real(kind=SP), intent(out) :: data(:,:)          ! data to be written
 
       integer(SIZE_T) :: dims(2)
       integer(HID_T) :: dset_id
@@ -1287,15 +1294,15 @@ module H5_Func_mod
 
       dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
-      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function Read_Real_2d_dataset
+    end function Read_Real32_2d_dataset
 
 !#################################################################################################!
-    function Read_Real_3d_dataset(loc_id, dset_name, data) result(dset_id)
+    function Read_Real32_3d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
-      real(dp), intent(out) :: data(:,:,:)        ! data to be written
+      real(kind=SP), intent(out) :: data(:,:,:)        ! data to be written
 
       integer(SIZE_T) :: dims(3)
       integer(HID_T) :: dset_id
@@ -1303,15 +1310,15 @@ module H5_Func_mod
 
       dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
-      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function Read_Real_3d_dataset
+    end function Read_Real32_3d_dataset
 
 !#################################################################################################!
-    function Read_Real_4d_dataset(loc_id, dset_name, data) result(dset_id)
+    function Read_Real32_4d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
-      real(dp), intent(out) :: data(:,:,:,:)      ! data to be written
+      real(kind=SP), intent(out) :: data(:,:,:,:)      ! data to be written
 
       integer(SIZE_T) :: dims(4)
       integer(HID_T) :: dset_id
@@ -1319,15 +1326,15 @@ module H5_Func_mod
 
       dims = shape(data, kind=HID_T)
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
-      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function Read_Real_4d_dataset
+    end function Read_Real32_4d_dataset
 
 !#################################################################################################!
-    function Read_Real_5d_dataset(loc_id, dset_name, data) result(dset_id)
+    function Read_Real32_5d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
-      real(dp), intent(out) :: data(:,:,:,:,:)    ! data to be written
+      real(kind=SP), intent(out) :: data(:,:,:,:,:)    ! data to be written
 
       integer(SIZE_T) :: dims(5)
       integer(HID_T) :: dset_id
@@ -1336,15 +1343,15 @@ module H5_Func_mod
       dims = shape(data, kind=HID_T)
 
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
-      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function Read_Real_5d_dataset
+    end function Read_Real32_5d_dataset
 
 !#################################################################################################!
-    function Read_Real_6d_dataset(loc_id, dset_name, data) result(dset_id)
+    function Read_Real32_6d_dataset(loc_id, dset_name, data) result(dset_id)
       integer(HID_T), intent(in) :: loc_id        ! local id in file
       character(len=*), intent(in) :: dset_name   ! name of dataset
-      real(dp), intent(out) :: data(:,:,:,:,:,:)  ! data to be written
+      real(kind=SP), intent(out) :: data(:,:,:,:,:,:)  ! data to be written
 
       integer(SIZE_T) :: dims(6)
       integer(HID_T) :: dset_id
@@ -1353,9 +1360,123 @@ module H5_Func_mod
       dims = shape(data, kind=HID_T)
 
       call h5dopen_f(loc_id, dset_name, dset_id, ierr)
-      call h5dread_f(dset_id, H5T_NATIVE_DOUBLE, data, dims, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_4, data, dims, ierr)
       call h5dclose_f(dset_id, ierr)
-    end function Read_Real_6d_dataset
+    end function Read_Real32_6d_dataset
+
+!#################################################################################################!
+    function Read_Real64_0d_dataset(loc_id, dset_name, data) result(dset_id)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(kind=DP), intent(out) :: data               ! data to be written
+
+      integer(SIZE_T) :: dims(1)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = (/ 0 /)
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_8, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function Read_Real64_0d_dataset
+
+!#################################################################################################!
+    function Read_Real64_1d_dataset(loc_id, dset_name, data) result(dset_id)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(kind=DP), intent(out) :: data(:)            ! data to be written
+
+      integer(SIZE_T) :: dims(1)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = shape(data, kind=HID_T)
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_8, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function Read_Real64_1d_dataset
+
+!#################################################################################################!
+    function Read_Real64_2d_dataset(loc_id, dset_name, data) result(dset_id)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(kind=DP), intent(out) :: data(:,:)          ! data to be written
+
+      integer(SIZE_T) :: dims(2)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = shape(data, kind=HID_T)
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_8, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function Read_Real64_2d_dataset
+
+!#################################################################################################!
+    function Read_Real64_3d_dataset(loc_id, dset_name, data) result(dset_id)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(kind=DP), intent(out) :: data(:,:,:)        ! data to be written
+
+      integer(SIZE_T) :: dims(3)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = shape(data, kind=HID_T)
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_8, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function Read_Real64_3d_dataset
+
+!#################################################################################################!
+    function Read_Real64_4d_dataset(loc_id, dset_name, data) result(dset_id)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(kind=DP), intent(out) :: data(:,:,:,:)      ! data to be written
+
+      integer(SIZE_T) :: dims(4)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = shape(data, kind=HID_T)
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_8, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function Read_Real64_4d_dataset
+
+!#################################################################################################!
+    function Read_Real64_5d_dataset(loc_id, dset_name, data) result(dset_id)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(kind=DP), intent(out) :: data(:,:,:,:,:)    ! data to be written
+
+      integer(SIZE_T) :: dims(5)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = shape(data, kind=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_8, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function Read_Real64_5d_dataset
+
+!#################################################################################################!
+    function Read_Real64_6d_dataset(loc_id, dset_name, data) result(dset_id)
+      integer(HID_T), intent(in) :: loc_id        ! local id in file
+      character(len=*), intent(in) :: dset_name   ! name of dataset
+      real(kind=DP), intent(out) :: data(:,:,:,:,:,:)  ! data to be written
+
+      integer(SIZE_T) :: dims(6)
+      integer(HID_T) :: dset_id
+      integer :: ierr
+
+      dims = shape(data, kind=HID_T)
+
+      call h5dopen_f(loc_id, dset_name, dset_id, ierr)
+      call h5dread_f(dset_id, H5T_NATIVE_REAL_8, data, dims, ierr)
+      call h5dclose_f(dset_id, ierr)
+    end function Read_Real64_6d_dataset
 
 !#################################################################################################!
     function Extend_Int8_1d_Dataset(loc_id, d_name, new_size, offset, dshape, val) result(stat)
