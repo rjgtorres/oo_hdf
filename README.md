@@ -8,7 +8,7 @@ This library as two main files, one with high level hdf5 routines **(H5_func_mod
 
 The function module was inspired, extends and has several of the functions present in [HDF5_utils](https://github.com/tiasus/HDF5_utils).
 
-The classes module has the same base structure of [mo_netcdf](https://github.com/rjgtorres/mo_netcdf).
+The classes module has the same base structure of [mo_netcdf](https://github.com/schaefed/mo_netcdf).
 
 There are two main classes, *H5Group* and *H5Dataset*. The *H5File* is extended from the *H5Group*. All classes can read and write attributes from the *H5Attributable* class.
 
