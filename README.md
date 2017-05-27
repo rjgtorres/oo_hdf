@@ -59,6 +59,18 @@ The following methods have been tested in several ways, most of them in producti
   call file%setGroup('name of the new group', newgroup)
   call newgroup%openGroup('name of an existing group', oldgroup)
   call oldgroup%closeGroup()
+  
+  call newgroup%getNumObj(number_of_objects)
+  ! number_of_objects is integer 32 bits, method counts the all the groups and datasets in a group
+
+  call newgroup%getObjNameByIdx(idx, obj_name)
+  ! method to retrieve the names of the objects in a group
+
+  call newgroup%isDset(obj_name)
+  ! logical method that verifies if an object is a Dataset
+  
+  call newgroup%isGrp(obj_name)
+  ! logical method that verifies if an object is a Group
   ```
  #### H5Dataset
   ```fortran 
@@ -178,6 +190,17 @@ Verify if an attribute exists:
         print*,a_name//' exists'
   end if
   !Attr_exists is a logical function
+  !a_name is the name of the attribute to check
+  ```
+Get the number of attributes of an object:
+  ```fortran 
+  call newdataset%getNumberAttrs(number_of_attributes)
+  !number_of_attributes is an integer of 32 bits
+  ```
+get the name of an attribute by index, the attributes names are retrived by alphabetical order
+  ```fortran 
+  call newdataset%getAttNameByIdx(idx, a_name)
+  !idx is an integer of 32 bits
   !a_name is the name of the attribute to check
   ```
 
