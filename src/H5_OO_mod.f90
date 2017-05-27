@@ -42,6 +42,9 @@ implicit none
     contains
 
       procedure, public  :: Attr_exists
+      procedure, public  :: getNumberAttrs
+      procedure, public  :: getAttTypeSize
+      procedure, public  :: getAttNameByIdx
 
       procedure, private :: set_Int16_Attr0
       procedure, private :: set_Int16_Attr1
@@ -93,6 +96,11 @@ implicit none
       procedure, public :: setGroup
       procedure, public :: closeGroup
       procedure, public :: openGroup
+
+      procedure, public :: getNumObj
+      procedure, public :: getObjNameByIdx
+      procedure, public :: isDset
+      procedure, public :: isGrp
   end type H5Group
 
 !#################################################################################################!
@@ -123,6 +131,17 @@ implicit none
       procedure, public :: setExtendable
       procedure, public :: getRank
       procedure, public :: getDims
+      procedure, public :: getDTypeSize  !    H5T_NO_CLASS_F -1
+                                         !    H5T_INTEGER_F   0
+                                         !    H5T_FLOAT_F     1
+                                         !    H5T_STRING_F    2
+                                         !    H5T_BITFIELD_F  3
+                                         !    H5T_OPAQUE_F    4
+                                         !    H5T_COMPOUND_F  5
+                                         !    H5T_REFERENCE_F 6
+                                         !    H5T_ENUM_F      7
+                                         !    H5T_VLEN_F      8
+                                         !    H5T_ARRAY_F     9
 
       procedure, public :: setEmpty
 
@@ -199,6 +218,7 @@ implicit none
       procedure, private :: Extend_Int16_2d
       procedure, private :: Extend_Int32_2d
       procedure, private :: Extend_Real32_2d
+
       procedure, private :: Extend_Real64_2d
       procedure, private :: Extend_Int8_3d
       procedure, private :: Extend_Int16_3d
@@ -348,6 +368,59 @@ function Attr_exists(self, a_name)
       Attr_exists = Ch_Attr_exist(self%id,a_name)
   end select
 end function Attr_exists
+
+subroutine getAttNameByIdx(self, idx, a_name)
+  class(H5Attributable), intent(in) :: self
+  integer(kind=I32), intent(in) :: idx
+  character(len=*), intent(out) :: a_name
+  character(len=80) :: obj_name
+  integer :: dset_id
+  integer :: hdferr
+
+  select type (self)
+    class is (H5Dataset)
+      dset_id = open_dset(self%parent_id,self%d_name)
+      hdferr = get_att_name_idx(dset_id, self%d_name, idx, a_name)
+      hdferr = close_dset(dset_id)
+    class default
+      hdferr = get_obj_name(self%id, obj_name)
+      hdferr = get_att_name_idx(self%id, trim(obj_name), idx, a_name)
+  end select
+end subroutine getAttNameByIdx
+
+subroutine getNumberAttrs(self, n_attrs)
+  class(H5Attributable), intent(in) :: self
+  integer(kind=I32), intent(out) :: n_attrs
+  integer(kind=I32) :: error
+  integer(kind=I32) :: dset_id
+
+  select type (self)
+    class is (H5Dataset)
+      dset_id = open_dset(self%parent_id,self%d_name)
+      n_attrs = number_attrs(dset_id)
+      error = close_dset(dset_id)
+    class default
+      n_attrs = number_attrs(self%id)
+  end select
+end subroutine getNumberAttrs
+
+subroutine getAttTypeSize(self, a_name, att_type, att_type_size)
+  class(H5Attributable), intent(in) :: self
+  character(len=*), intent (in):: a_name
+  integer(kind=I32), intent(out) :: att_type
+  integer(kind=I64), intent(out) :: att_type_size
+  integer(kind=I32) :: hdferr
+  integer(kind=I32) :: dset_id
+
+  select type (self)
+    class is (H5Dataset)
+      dset_id = open_dset(self%parent_id,self%d_name)
+      call attr_type_size(dset_id, a_name, att_type, att_type_size, hdferr)
+      hdferr = close_dset(dset_id)
+    class default
+      call attr_type_size(self%id, a_name, att_type, att_type_size, hdferr)
+  end select
+end subroutine getAttTypeSize
 
 subroutine set_Int16_Attr0(self, a_name, val)
   class(H5Attributable), intent(in) :: self
@@ -681,6 +754,40 @@ subroutine closeGroup(self)
   error=hdf_close_group(self%id)
 end subroutine closeGroup
 
+subroutine getNumObj(self, nlinks)
+  class(H5Group) :: self
+  integer(kind=I32), intent(out) :: nlinks
+  integer(kind=I32) :: error
+
+  error=grp_num_of_obj(self%id, nlinks)
+end subroutine getNumObj
+
+subroutine getObjNameByIdx(self, idx, obj_name)
+  class(H5Group) :: self
+  integer(kind=I32), intent(in) :: idx
+  character(len=*), intent(out) :: obj_name
+  integer(kind=I32) :: hdferr
+
+  hdferr = grp_obj_name_idx(self%id, idx, obj_name)
+end subroutine getObjNameByIdx
+
+function isDset(self, obj_name)
+  class(H5Group) :: self
+  character(len=*), intent(in) :: obj_name
+  logical :: isDset
+  integer(kind=I32) :: hdferr
+
+  hdferr = obj_is_dset(self%id, obj_name, isDset)
+end function isDset
+
+function isGrp(self, obj_name)
+  class(H5Group) :: self
+  character(len=*), intent(in) :: obj_name
+  logical :: isGrp
+  integer(kind=I32) :: hdferr
+
+  hdferr = obj_is_grp(self%id, obj_name, isGrp)
+end function isGrp
 !#################################################################################################!
 !######################################### File Methods ##########################################!
 !#################################################################################################!
@@ -1003,6 +1110,15 @@ subroutine getDims(self, dims)
 
   error = hdf_get_dims(self%parent_id,self%d_name,dims)
 end subroutine getDims
+
+subroutine getDTypeSize(self,dset_type, dset_type_size)
+  class(H5Dataset) :: self
+  integer(kind=I32), intent(out) :: dset_type
+  integer(kind=I64), intent(out) :: dset_type_size
+  integer(kind=I32) :: error
+
+  call get_dset_type(self%parent_id, self%d_name, dset_type, dset_type_size, error)
+end subroutine getDTypeSize
 
 subroutine set_Int8_1d(self, val)
   class(H5Dataset), intent(inout) :: self
