@@ -281,6 +281,7 @@ module H5_Func_mod
     is_grp=.false.
     if(obj_type==H5I_GROUP_F) is_grp=.true.
   end function obj_is_grp
+
 !#################################################################################################!
   function hdf_get_rank(loc_id, dset_name, d_rank) result(hdferr)
     integer(I32), intent(in) :: loc_id        !< location id
@@ -424,6 +425,26 @@ module H5_Func_mod
 
         call h5aget_name_by_idx_f(obj_id, obj_name, H5_INDEX_NAME_F, H5_ITER_INC_F, int(idx,8), a_name, hdferr)
     end function get_att_name_idx
+
+!#################################################################################################!
+  function get_att_dims(loc_id, a_name, dims) result(hdferr)
+    integer(I32), intent(in) :: loc_id        !< location id
+    character(len=*), intent(in) :: a_name   !< name of dataset
+    integer, intent(out) :: dims(:)             !< dimensions of the dataset
+    integer(I32) :: attr_id, dspace_id
+    integer :: D_RANK
+    integer(HSIZE_T) :: aset_dims(6), max_dims(6)
+    integer :: hdferr
+
+    call h5aopen_f(loc_id, a_name, attr_id, hdferr)
+    call H5aget_space_f(attr_id, dspace_id, hdferr)
+    call h5sget_simple_extent_ndims_f(dspace_id, D_RANK, hdferr)
+    call h5sget_simple_extent_dims_f(dspace_id, aset_dims(1:D_RANK), max_dims(1:D_RANK), hdferr)
+    dims(1:D_RANK) = int(aset_dims(1:D_RANK))
+
+    call h5sclose_f(dspace_id, hdferr)
+    call h5aclose_f(attr_id,hdferr)
+  end function get_att_dims
 
 !#################################################################################################!
     function get_obj_name(obj_id, obj_name) result(hdferr)

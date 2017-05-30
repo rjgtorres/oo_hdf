@@ -45,6 +45,7 @@ implicit none
       procedure, public  :: getNumberAttrs
       procedure, public  :: getAttTypeSize
       procedure, public  :: getAttNameByIdx
+      procedure, public  :: getAttDims
 
       procedure, private :: set_Int16_Attr0
       procedure, private :: set_Int16_Attr1
@@ -421,6 +422,23 @@ subroutine getAttTypeSize(self, a_name, att_type, att_type_size)
       call attr_type_size(self%id, a_name, att_type, att_type_size, hdferr)
   end select
 end subroutine getAttTypeSize
+
+subroutine getAttDims(self, a_name, dims)
+  class(H5Attributable), intent(in) :: self
+  character(len=*), intent (in):: a_name
+  integer, intent(out) :: dims(:)
+  integer(kind=I32) :: hdferr
+  integer(kind=I32) :: dset_id
+
+  select type (self)
+    class is (H5Dataset)
+      dset_id = open_dset(self%parent_id,self%d_name)
+      hdferr = get_att_dims(dset_id, a_name, dims)
+      hdferr = close_dset(dset_id)
+    class default
+      hdferr = get_att_dims(self%id, a_name, dims)
+  end select
+end subroutine getAttDims
 
 subroutine set_Int16_Attr0(self, a_name, val)
   class(H5Attributable), intent(in) :: self
